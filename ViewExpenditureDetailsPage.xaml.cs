@@ -140,11 +140,18 @@ namespace CERS
                 expenditureDetailslist = expenditureDetailsDatabase.GetExpenditureDetails(query).ToList();
                 _allExpenditures = expenditureDetailslist;
                 
-                // Check if page is still valid before setting ItemsSource
-                if (this.Handler != null && listView_expendituredetails != null)
+                Console.WriteLine($"loadtypewisedata: Loaded {expenditureDetailslist?.Count ?? 0} items");
+                
+                // Set ItemsSource with delay to ensure CollectionView is ready
+                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    listView_expendituredetails.ItemsSource = expenditureDetailslist;
-                }
+                    await Task.Delay(50);
+                    if (this.Handler != null && listView_expendituredetails != null)
+                    {
+                        listView_expendituredetails.ItemsSource = expenditureDetailslist;
+                        Console.WriteLine($"ItemsSource set with {expenditureDetailslist?.Count ?? 0} items");
+                    }
+                });
                 
                 if (expenditureDetailslist != null && expenditureDetailslist.Any())
                 {
@@ -203,16 +210,23 @@ namespace CERS
                 expenditureDetailslist = expenditureDetailsDatabase.GetExpenditureDetails(query).ToList();
                 _allExpenditures = expenditureDetailslist;
                 
+                Console.WriteLine($"loaddatewisedata: Loaded {expenditureDetailslist?.Count ?? 0} items");
+                
                 if (this.Handler != null && lbl_heading != null)
                 {
                     lbl_heading.Text = App.GetLabelByKey("lbl_expdate") + " - " + expdatetodisplayvalue;
                 }
                 
-                // Check if page is still valid before setting ItemsSource
-                if (this.Handler != null && listView_expendituredetails != null)
+                // Set ItemsSource with delay to ensure CollectionView is ready
+                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    listView_expendituredetails.ItemsSource = expenditureDetailslist;
-                }
+                    await Task.Delay(50);
+                    if (this.Handler != null && listView_expendituredetails != null)
+                    {
+                        listView_expendituredetails.ItemsSource = expenditureDetailslist;
+                        Console.WriteLine($"ItemsSource set with {expenditureDetailslist?.Count ?? 0} items");
+                    }
+                });
             }
             catch (ObjectDisposedException)
             {
@@ -262,6 +276,8 @@ namespace CERS
                     // Double-check before setting ItemsSource
                     if (this.Handler != null && listView_expendituredetails != null)
                     {
+                        // Force refresh for CollectionView
+                        listView_expendituredetails.ItemsSource = null;
                         listView_expendituredetails.ItemsSource = filteredList;
                     }
                 }
@@ -270,6 +286,8 @@ namespace CERS
                     // Restore original list when search is cleared
                     if (this.Handler != null && listView_expendituredetails != null && expenditureDetailslist != null)
                     {
+                        // Force refresh for CollectionView
+                        listView_expendituredetails.ItemsSource = null;
                         listView_expendituredetails.ItemsSource = expenditureDetailslist;
                     }
                 }
