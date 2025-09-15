@@ -35,21 +35,28 @@ namespace CERS
             expensestype = expendselected;
             expensesvalue = expvalue;
             expdatetodisplayvalue = expdatetodispvalue;
-            if (expensestype.Equals("type"))
-            {
-                loadtypewisedata(expensesvalue);
-            }
-            else if (expensestype.Equals("date"))
-            {
-                loaddatewisedata(expensesvalue);
-            }
+            _ = LoadDataAsync(expensestype, expensesvalue);
             userDetails = userDetailsDatabase.GetUserDetails("Select * from UserDetails").ToList();
             lbl_heading0.Text = App.setselfagentuserheading();
             searchbar_expendituredetails.Placeholder = App.GetLabelByKey("Search");
         }
 
-        void loadtypewisedata(string expvalue)
+        private async Task LoadDataAsync(string type, string value)
         {
+            if (type.Equals("type"))
+            {
+                await loadtypewisedata(value);
+            }
+            else if (type.Equals("date"))
+            {
+                await loaddatewisedata(value);
+            }
+        }
+
+        async Task loadtypewisedata(string expvalue)
+        {
+            if (this.Handler == null) return;
+
             query = $"Select *" +
                     $",case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
                     $",case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
@@ -77,7 +84,11 @@ namespace CERS
                     $",'true' as expdatevisibility" +
                     $" from ExpenditureDetails " +
                     $" where expcode='{expvalue}'";
-            expenditureDetailslist = expenditureDetailsDatabase.GetExpenditureDetails(query).ToList();
+            var result = await Task.Run(() => expenditureDetailsDatabase.GetExpenditureDetails(query).ToList());
+
+            if (this.Handler == null) return;
+
+            expenditureDetailslist = result;
             listView_expendituredetails.ItemsSource = expenditureDetailslist;
             if (App.Language == 0)
             {
@@ -89,8 +100,10 @@ namespace CERS
             }
         }
 
-        void loaddatewisedata(string expvalue)
+        async Task loaddatewisedata(string expvalue)
         {
+            if (this.Handler == null) return;
+
             query = $"Select *" +
                     $",case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
                     $",case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
@@ -118,7 +131,11 @@ namespace CERS
                     $",'false' as expdatevisibility" +
                     $" from ExpenditureDetails " +
                     $" where expDate='{expvalue}'";
-            expenditureDetailslist = expenditureDetailsDatabase.GetExpenditureDetails(query).ToList();
+            var result = await Task.Run(() => expenditureDetailsDatabase.GetExpenditureDetails(query).ToList());
+
+            if (this.Handler == null) return;
+
+            expenditureDetailslist = result;
             lbl_heading.Text = App.GetLabelByKey("lbl_expdate") + " - " + expdatetodisplayvalue;
             listView_expendituredetails.ItemsSource = expenditureDetailslist;
         }

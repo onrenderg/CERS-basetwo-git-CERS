@@ -42,14 +42,7 @@ namespace CERS.Observer
             expensesvalue = expvalue;
             expdatetodisplayvalue = expdatetodispvalue;
             autoid = candidateid;
-            if (expensestype.Equals("type"))
-            {
-                loadtypewisedata(expensesvalue);
-            }
-            else if (expensestype.Equals("date"))
-            {
-                loaddatewisedata(expensesvalue);
-            }
+            _ = LoadDataAsync(expensestype, expensesvalue);
 
 
 
@@ -62,8 +55,22 @@ namespace CERS.Observer
             searchbar_expendituredetails.Placeholder = App.GetLabelByKey("Search");
         }
 
-        void loadtypewisedata(string expvalue)
+        private async Task LoadDataAsync(string type, string value)
         {
+            if (type.Equals("type"))
+            {
+                await loadtypewisedata(value);
+            }
+            else if (type.Equals("date"))
+            {
+                await loaddatewisedata(value);
+            }
+        }
+
+        async Task loadtypewisedata(string expvalue)
+        {
+            if (this.Handler == null) return;
+
             query = $"Select *" +
                     $", case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
                     $", case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
@@ -93,7 +100,11 @@ namespace CERS.Observer
                     $",(case when evidenceFile ='Y' then 'true' else 'false' end )pdfvisibility" +
                     $" from ObserverExpenditureDetails " +
                     $" where expcode='{expvalue}'";
-            observerExpenditureDetailsList = observerExpenditureDetailsDatabase.GetObserverExpenditureDetails(query).ToList();
+            var result = await Task.Run(() => observerExpenditureDetailsDatabase.GetObserverExpenditureDetails(query).ToList());
+
+            if (this.Handler == null) return;
+
+            observerExpenditureDetailsList = result;
             listView_expendituredetails.ItemsSource = observerExpenditureDetailsList;
             if (App.Language == 0)
             {
@@ -105,8 +116,10 @@ namespace CERS.Observer
             }
         }
 
-        void loaddatewisedata(string expvalue)
+        async Task loaddatewisedata(string expvalue)
         {
+            if (this.Handler == null) return;
+
             query = $"Select *" +
                  $",case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
                     $",case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
@@ -135,7 +148,11 @@ namespace CERS.Observer
                     $",(case when ObserverRemarks <> '' then '{App.GetLabelByKey("viewreplyremarks")}' else '{App.GetLabelByKey("raiseobjection")}' end)lblObserverRemarks" +
                     $" from ObserverExpenditureDetails " +
                     $" where expDate='{expvalue}'";
-            observerExpenditureDetailsList = observerExpenditureDetailsDatabase.GetObserverExpenditureDetails(query).ToList();
+            var result = await Task.Run(() => observerExpenditureDetailsDatabase.GetObserverExpenditureDetails(query).ToList());
+
+            if (this.Handler == null) return;
+
+            observerExpenditureDetailsList = result;
             lbl_heading.Text = App.GetLabelByKey("lbl_expdate") + " - " + expdatetodisplayvalue;
             listView_expendituredetails.ItemsSource = observerExpenditureDetailsList;
         }
