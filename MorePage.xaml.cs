@@ -122,15 +122,16 @@ namespace CERS
             List<UserDetails> userDetails;
             userDetails = userDetailsDatabase.GetUserDetails("Select * from UserDetails").ToList();
             DateTime resultdateadd30 = DateTime.Parse(userDetails.ElementAt(0).Resultdatethirtydays);
-            if (currentdate >= resultdateadd30)
-            {
-                DisplayAlert(App.GetLabelByKey("AppName"), App.GetLabelByKey("expensedateover"), App.Btn_Close);
-            }
-            else
-            {
+            // mgogo
+            // if (currentdate >= resultdateadd30)
+            // {
+            //     DisplayAlert(App.GetLabelByKey("AppName"), App.GetLabelByKey("expensedateover"), App.Btn_Close);
+            // }
+            // else
+            // {
                 Preferences.Set("Active", 1);
                 Application.Current.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
-            }
+            // }
 
         }
 
