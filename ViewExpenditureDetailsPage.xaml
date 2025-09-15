@@ -20,17 +20,33 @@
 
             <SearchBar  x:Name="searchbar_expendituredetails" CancelButtonColor="Red" HorizontalOptions="FillAndExpand" Placeholder="Search" TextChanged="searchbar_expendituredetails_TextChanged"/>
 
-            <ListView x:Name="listView_expendituredetails" HasUnevenRows="True" SeparatorColor="#126b8a"  SelectionMode="None" >
-                <ListView.ItemTemplate >
+            <CollectionView x:Name="listView_expendituredetails" SelectionMode="None" >
+                <CollectionView.ItemTemplate >
                     <DataTemplate>
-                        <ViewCell >
-                            <Frame VerticalOptions="StartAndExpand" Margin="0,10,0,10"  HasShadow="False" CornerRadius="20" BackgroundColor="White" BorderColor="Navy">
-                                <Grid >
-                                    <Grid.RowDefinitions>
+                        <Border Stroke="Navy" StrokeThickness="1" BackgroundColor="White" Margin="0,10,0,10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20"/>
+                            </Border.StrokeShape>
+                            <Grid >
+                                <Grid.RowDefinitions>
 
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -106,11 +122,10 @@
 
                                     </StackLayout>
                                 </Grid>
-                            </Frame>
-                        </ViewCell>
+                        </Border>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
 
 

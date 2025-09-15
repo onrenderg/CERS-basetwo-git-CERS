@@ -31,135 +31,215 @@ namespace CERS
         public ViewExpenditureDetailsPage(string expendselected, string expvalue, string expdatetodispvalue)
         {
             InitializeComponent();
-            this.Appearing += (s, e) => { searchbar_expendituredetails.TextChanged += searchbar_expendituredetails_TextChanged; };
-            this.Disappearing += (s, e) => { searchbar_expendituredetails.TextChanged -= searchbar_expendituredetails_TextChanged; };
+            
+            // Safer event handler management
+            this.Appearing += OnPageAppearing;
+            this.Disappearing += OnPageDisappearing;
+            
             expensestype = expendselected;
             expensesvalue = expvalue;
             expdatetodisplayvalue = expdatetodispvalue;
-            _ = LoadDataAsync(expensestype, expensesvalue);
+            
+            if (expensestype.Equals("type"))
+            {
+                loadtypewisedata(expensesvalue);
+            }
+            else if (expensestype.Equals("date"))
+            {
+                loaddatewisedata(expensesvalue);
+            }
+            
             userDetails = userDetailsDatabase.GetUserDetails("Select * from UserDetails").ToList();
             lbl_heading0.Text = App.setselfagentuserheading();
             searchbar_expendituredetails.Placeholder = App.GetLabelByKey("Search");
         }
 
-        private async Task LoadDataAsync(string type, string value)
+        private void OnPageAppearing(object sender, EventArgs e)
         {
-            if (type.Equals("type"))
+            if (searchbar_expendituredetails != null)
             {
-                await loadtypewisedata(value);
-            }
-            else if (type.Equals("date"))
-            {
-                await loaddatewisedata(value);
+                searchbar_expendituredetails.TextChanged += searchbar_expendituredetails_TextChanged;
             }
         }
 
-        async Task loadtypewisedata(string expvalue)
+        private void OnPageDisappearing(object sender, EventArgs e)
         {
-            if (this.Handler == null) return;
-
-            query = $"Select *" +
-                    $",case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
-                    $",case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
-                    $", (case  when {App.Language} =0 then ExpTypeName else ExpTypeNameLocal end)ExpTypeName " +
-                    $", (case  when {App.Language} =0 then PayModeName else PayModeNameLocal end)PayModeName " +
-                    $",'{App.GetLabelByKey("lbl_expdate")}' as lblexpDate" +
-                    $",'{App.GetLabelByKey("lbl_exptype")}' as lblexptype" +
-                    $",'{App.GetLabelByKey("lbl_amounttype")}' as lblamtType" +
-                    $",'{App.GetLabelByKey("lbl_amount")}' as lblAmount" +
-                    $",'{App.GetLabelByKey("lblObserverRemarks")}' as lblObserverRemarks" +
-                    $",'{App.GetLabelByKey("lbl_amountoutstanding")}' as lbl_amountoutstanding" +
-                    $",'{App.GetLabelByKey("lbl_paymentdate")}' as lblpaymentDate" +
-                    $",'{App.GetLabelByKey("lbl_voucherBillNumber")}' as lblvoucherBillNumber" +
-                    $",'{App.GetLabelByKey("lbl_payMode")}' as lblpayMode" +
-                    $",'{App.GetLabelByKey("lbl_payeeName")}' as lblpayeeName" +
-                    $",'{App.GetLabelByKey("lbl_payeeAddress")}' as lblpayeeAddress" +
-                    $",'{App.GetLabelByKey("lbl_sourceMoney")}' as lblsourceMoney" +
-                    $",'{App.GetLabelByKey("lblRemarks")}' as lblremarks" +
-                    $",'{App.GetLabelByKey("EnteredOn")}' as lblEnteredOn" +
-                    $", (case when ExpStatus='P' then 'true' else 'false' end)btnEditVisibility" +
-                    $",'{App.GetLabelByKey("Edit")}' as lbledit" +
-                    $",'{App.GetLabelByKey("Reply")}' as lblReplyToObserverRemarks" +
-                    $", (case when ObserverRemarks <> '' then 'true' else 'false' end)btnrplyobserverremarksvisibility" +
-                    $",'false' as exptypevisibility" +
-                    $",'true' as expdatevisibility" +
-                    $" from ExpenditureDetails " +
-                    $" where expcode='{expvalue}'";
-            var result = await Task.Run(() => expenditureDetailsDatabase.GetExpenditureDetails(query).ToList());
-
-            if (this.Handler == null) return;
-
-            _allExpenditures = result;
-            expenditureDetailslist = new List<ExpenditureDetails>(_allExpenditures);
-            listView_expendituredetails.ItemsSource = expenditureDetailslist;
-            if (App.Language == 0)
+            try
             {
-                lbl_heading.Text = App.GetLabelByKey("lbl_exptype") + " - "  + expenditureDetailslist.ElementAt(0).ExpTypeName;
+                if (searchbar_expendituredetails != null)
+                {
+                    searchbar_expendituredetails.TextChanged -= searchbar_expendituredetails_TextChanged;
+                }
+                
+                // Clear ListView to prevent layout issues
+                if (listView_expendituredetails != null)
+                {
+                    listView_expendituredetails.ItemsSource = null;
+                }
             }
-            else
+            catch (ObjectDisposedException)
             {
-                lbl_heading.Text = App.GetLabelByKey("lbl_exptype") + " - " + expenditureDetailslist.ElementAt(0).ExpTypeNameLocal;
+                // Ignore disposal exceptions during cleanup
+            }
+        }
+        
+        protected override void OnDisappearing()
+        {
+            try
+            {
+                // Additional cleanup
+                if (listView_expendituredetails != null)
+                {
+                    listView_expendituredetails.ItemsSource = null;
+                }
+                
+                base.OnDisappearing();
+            }
+            catch (ObjectDisposedException)
+            {
+                // Ignore disposal exceptions
             }
         }
 
-        async Task loaddatewisedata(string expvalue)
+
+        void loadtypewisedata(string expvalue)
         {
-            if (this.Handler == null) return;
+            try
+            {
+                query = $"Select *" +
+                        $",case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
+                        $",case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
+                        $", (case  when {App.Language} =0 then ExpTypeName else ExpTypeNameLocal end)ExpTypeName " +
+                        $", (case  when {App.Language} =0 then PayModeName else PayModeNameLocal end)PayModeName " +
+                        $",'{App.GetLabelByKey("lbl_expdate")}' as lblexpDate" +
+                        $",'{App.GetLabelByKey("lbl_exptype")}' as lblexptype" +
+                        $",'{App.GetLabelByKey("lbl_amounttype")}' as lblamtType" +
+                        $",'{App.GetLabelByKey("lbl_amount")}' as lblAmount" +
+                        $",'{App.GetLabelByKey("lblObserverRemarks")}' as lblObserverRemarks" +
+                        $",'{App.GetLabelByKey("lbl_amountoutstanding")}' as lbl_amountoutstanding" +
+                        $",'{App.GetLabelByKey("lbl_paymentdate")}' as lblpaymentDate" +
+                        $",'{App.GetLabelByKey("lbl_voucherBillNumber")}' as lblvoucherBillNumber" +
+                        $",'{App.GetLabelByKey("lbl_payMode")}' as lblpayMode" +
+                        $",'{App.GetLabelByKey("lbl_payeeName")}' as lblpayeeName" +
+                        $",'{App.GetLabelByKey("lbl_payeeAddress")}' as lblpayeeAddress" +
+                        $",'{App.GetLabelByKey("lbl_sourceMoney")}' as lblsourceMoney" +
+                        $",'{App.GetLabelByKey("lblRemarks")}' as lblremarks" +
+                        $",'{App.GetLabelByKey("EnteredOn")}' as lblEnteredOn" +
+                        $", (case when ExpStatus='P' then 'true' else 'false' end)btnEditVisibility" +
+                        $",'{App.GetLabelByKey("Edit")}' as lbledit" +
+                        $",'{App.GetLabelByKey("Reply")}' as lblReplyToObserverRemarks" +
+                        $", (case when ObserverRemarks <> '' then 'true' else 'false' end)btnrplyobserverremarksvisibility" +
+                        $",'false' as exptypevisibility" +
+                        $",'true' as expdatevisibility" +
+                        $",CASE WHEN expDate IS NOT NULL THEN date(expDate) ELSE '' END as expDateDisplay" +
+                        $",CASE WHEN paymentDate IS NOT NULL THEN date(paymentDate) ELSE '' END as paymentDateDisplay" +
+                        $",CASE WHEN evidenceFile = 'Y' THEN 'true' ELSE 'false' END as pdfvisibility" +
+                        $" from ExpenditureDetails " +
+                        $" where expcode='{expvalue}'";
+                
+                expenditureDetailslist = expenditureDetailsDatabase.GetExpenditureDetails(query).ToList();
+                _allExpenditures = expenditureDetailslist;
+                
+                // Check if page is still valid before setting ItemsSource
+                if (this.Handler != null && listView_expendituredetails != null)
+                {
+                    listView_expendituredetails.ItemsSource = expenditureDetailslist;
+                }
+                
+                if (expenditureDetailslist != null && expenditureDetailslist.Any())
+                {
+                    if (App.Language == 0)
+                    {
+                        lbl_heading.Text = App.GetLabelByKey("lbl_exptype") + " - " + expenditureDetailslist.ElementAt(0).ExpTypeName;
+                    }
+                    else
+                    {
+                        lbl_heading.Text = App.GetLabelByKey("lbl_exptype") + " - " + expenditureDetailslist.ElementAt(0).ExpTypeNameLocal;
+                    }
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                // Page disposed during data loading
+                return;
+            }
+        }
 
-            query = $"Select *" +
-                    $",case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
-                    $",case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
-                    $", (case  when {App.Language} =0 then ExpTypeName else ExpTypeNameLocal end)ExpTypeName " +
-                    $", (case  when {App.Language} =0 then PayModeName else PayModeNameLocal end)PayModeName " +
-                    $",'{App.GetLabelByKey("lbl_expdate")}' as lblexpDate" +
-                    $",'{App.GetLabelByKey("lbl_exptype")}' as lblexptype" +
-                    $",'{App.GetLabelByKey("lbl_amounttype")}' as lblamtType" +
-                    $",'{App.GetLabelByKey("lblObserverRemarks")}' as lblObserverRemarks" +
-                    $",'{App.GetLabelByKey("lbl_amountoutstanding")}' as lbl_amountoutstanding" +
-                    $",'{App.GetLabelByKey("lbl_amount")}' as lblAmount" +
-                    $",'{App.GetLabelByKey("lbl_paymentdate")}' as lblpaymentDate" +
-                    $",'{App.GetLabelByKey("lbl_voucherBillNumber")}' as lblvoucherBillNumber" +
-                    $",'{App.GetLabelByKey("lbl_payMode")}' as lblpayMode" +
-                    $",'{App.GetLabelByKey("lbl_payeeName")}' as lblpayeeName" +
-                    $",'{App.GetLabelByKey("lbl_payeeAddress")}' as lblpayeeAddress" +
-                    $",'{App.GetLabelByKey("lbl_sourceMoney")}' as lblsourceMoney" +
-                    $",'{App.GetLabelByKey("lblRemarks")}' as lblremarks" +
-                    $",'{App.GetLabelByKey("EnteredOn")}' as lblEnteredOn" +
-                    $",'{App.GetLabelByKey("Edit")}' as lbledit" +
-                    $", (case when ExpStatus='P' then 'true' else 'false' end)btnEditVisibility" +
-                    $",'{App.GetLabelByKey("Reply")}' as lblReplyToObserverRemarks" +
-                    $", (case when ObserverRemarks <> '' then 'true' else 'false' end)btnrplyobserverremarksvisibility" +
-                    $",'true' as exptypevisibility" +
-                    $",'false' as expdatevisibility" +
-                    $" from ExpenditureDetails " +
-                    $" where expDate='{expvalue}'";
-            var result = await Task.Run(() => expenditureDetailsDatabase.GetExpenditureDetails(query).ToList());
-
-            if (this.Handler == null) return;
-
-            _allExpenditures = result;
-            expenditureDetailslist = new List<ExpenditureDetails>(_allExpenditures);
-            lbl_heading.Text = App.GetLabelByKey("lbl_expdate") + " - " + expdatetodisplayvalue;
-            listView_expendituredetails.ItemsSource = expenditureDetailslist;
+        void loaddatewisedata(string expvalue)
+        {
+            try
+            {
+                query = $"Select *" +
+                        $",case  when amount <> '' then ('₹ ' || amount) else ('₹ 0') end amounttodisplay" +
+                        $",case  when amountoutstanding <> '' then ('₹ ' || amountoutstanding) else ('₹ 0') end amountoutstandingtodisplay" +
+                        $", (case  when {App.Language} =0 then ExpTypeName else ExpTypeNameLocal end)ExpTypeName " +
+                        $", (case  when {App.Language} =0 then PayModeName else PayModeNameLocal end)PayModeName " +
+                        $",'{App.GetLabelByKey("lbl_expdate")}' as lblexpDate" +
+                        $",'{App.GetLabelByKey("lbl_exptype")}' as lblexptype" +
+                        $",'{App.GetLabelByKey("lbl_amounttype")}' as lblamtType" +
+                        $",'{App.GetLabelByKey("lblObserverRemarks")}' as lblObserverRemarks" +
+                        $",'{App.GetLabelByKey("lbl_amountoutstanding")}' as lbl_amountoutstanding" +
+                        $",'{App.GetLabelByKey("lbl_amount")}' as lblAmount" +
+                        $",'{App.GetLabelByKey("lbl_paymentdate")}' as lblpaymentDate" +
+                        $",'{App.GetLabelByKey("lbl_voucherBillNumber")}' as lblvoucherBillNumber" +
+                        $",'{App.GetLabelByKey("lbl_payMode")}' as lblpayMode" +
+                        $",'{App.GetLabelByKey("lbl_payeeName")}' as lblpayeeName" +
+                        $",'{App.GetLabelByKey("lbl_payeeAddress")}' as lblpayeeAddress" +
+                        $",'{App.GetLabelByKey("lbl_sourceMoney")}' as lblsourceMoney" +
+                        $",'{App.GetLabelByKey("lblRemarks")}' as lblremarks" +
+                        $",'{App.GetLabelByKey("EnteredOn")}' as lblEnteredOn" +
+                        $",'{App.GetLabelByKey("Edit")}' as lbledit" +
+                        $", (case when ExpStatus='P' then 'true' else 'false' end)btnEditVisibility" +
+                        $",'{App.GetLabelByKey("Reply")}' as lblReplyToObserverRemarks" +
+                        $", (case when ObserverRemarks <> '' then 'true' else 'false' end)btnrplyobserverremarksvisibility" +
+                        $",'true' as exptypevisibility" +
+                        $",'false' as expdatevisibility" +
+                        $",CASE WHEN expDate IS NOT NULL THEN date(expDate) ELSE '' END as expDateDisplay" +
+                        $",CASE WHEN paymentDate IS NOT NULL THEN date(paymentDate) ELSE '' END as paymentDateDisplay" +
+                        $",CASE WHEN evidenceFile = 'Y' THEN 'true' ELSE 'false' END as pdfvisibility" +
+                        $" from ExpenditureDetails " +
+                        $" where expDate='{expvalue}'";
+                
+                expenditureDetailslist = expenditureDetailsDatabase.GetExpenditureDetails(query).ToList();
+                _allExpenditures = expenditureDetailslist;
+                
+                if (this.Handler != null && lbl_heading != null)
+                {
+                    lbl_heading.Text = App.GetLabelByKey("lbl_expdate") + " - " + expdatetodisplayvalue;
+                }
+                
+                // Check if page is still valid before setting ItemsSource
+                if (this.Handler != null && listView_expendituredetails != null)
+                {
+                    listView_expendituredetails.ItemsSource = expenditureDetailslist;
+                }
+            }
+            catch (ObjectDisposedException)
+            {
+                // Page disposed during data loading
+                return;
+            }
         }
 
         private void searchbar_expendituredetails_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // MAUI Lifecycle Check: Ensure the page and controls are still valid.
+            // MAUI Lifecycle Check: Ensure the page and controls are still valid
             if (this.Handler == null || searchbar_expendituredetails == null || listView_expendituredetails == null)
             {
-                return; // Page or controls are disposed, do nothing.
+                return; // Page or controls are disposed, do nothing
             }
+
+            // Add null checks to prevent crashes
+            if (expenditureDetailslist == null || !expenditureDetailslist.Any())
+                return;
 
             try
             {
-                string texttosearch = searchbar_expendituredetails.Text?.ToLower().Trim() ?? string.Empty;
-
-                if (_allExpenditures == null) return; // Don't search if master list isn't ready
-
-                if (!string.IsNullOrEmpty(texttosearch))
+                if (!string.IsNullOrEmpty(searchbar_expendituredetails.Text))
                 {
-                    var filteredList = _allExpenditures.Where(t =>
+                    string texttosearch = searchbar_expendituredetails.Text.ToLower().Trim();
+
+                    var filteredList = expenditureDetailslist.Where(t => t != null && (
                         (t.ExpenseID?.ToLower().Contains(texttosearch) ?? false)
                         || (t.expDate?.ToLower().Contains(texttosearch) ?? false)
                         || (t.amtType?.ToLower().Contains(texttosearch) ?? false)
@@ -177,25 +257,32 @@ namespace CERS
                         || (t.ExpTypeNameLocal?.ToLower().Contains(texttosearch) ?? false)
                         || (t.PayModeName?.ToLower().Contains(texttosearch) ?? false)
                         || (t.PayModeNameLocal?.ToLower().Contains(texttosearch) ?? false)
-                    ).ToList();
+                    )).ToList();
 
-                    listView_expendituredetails.ItemsSource = filteredList;
+                    // Double-check before setting ItemsSource
+                    if (this.Handler != null && listView_expendituredetails != null)
+                    {
+                        listView_expendituredetails.ItemsSource = filteredList;
+                    }
                 }
                 else
                 {
-                    // If search text is empty, restore the original list from the master list.
-                    listView_expendituredetails.ItemsSource = _allExpenditures;
+                    // Restore original list when search is cleared
+                    if (this.Handler != null && listView_expendituredetails != null && expenditureDetailslist != null)
+                    {
+                        listView_expendituredetails.ItemsSource = expenditureDetailslist;
+                    }
                 }
+            }
+            catch (ObjectDisposedException)
+            {
+                // Silently handle disposed object exceptions
+                return;
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it gracefully.
-                Console.WriteLine($"An error occurred during search: {ex.Message}");
-                // Optionally, restore the original list to prevent a crash state.
-                if (listView_expendituredetails != null)
-                {
-                    listView_expendituredetails.ItemsSource = expenditureDetailslist;
-                }
+                // Log other exceptions but don't crash
+                Console.WriteLine($"Search error: {ex.Message}");
             }
         }
 
