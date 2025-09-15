@@ -36,6 +36,8 @@ namespace CERS.Observer
         public ObserverViewExpenditureDetailsPage(string candidateid, string expendselected, string expvalue, string expdatetodispvalue)
         {
             InitializeComponent();
+            this.Appearing += (s, e) => { searchbar_expendituredetails.TextChanged += searchbar_expendituredetails_TextChanged; };
+            this.Disappearing += (s, e) => { searchbar_expendituredetails.TextChanged -= searchbar_expendituredetails_TextChanged; };
             expensestype = expendselected;
             expensesvalue = expvalue;
             expdatetodisplayvalue = expdatetodispvalue;
@@ -140,42 +142,61 @@ namespace CERS.Observer
 
         private void searchbar_expendituredetails_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(searchbar_expendituredetails.Text))
+            // MAUI Lifecycle Check: Ensure the page and controls are still valid.
+            if (this.Handler == null || searchbar_expendituredetails == null || listView_expendituredetails == null)
             {
-                string texttosearch = searchbar_expendituredetails.Text.ToLower().Trim();
-
-                listView_expendituredetails.ItemsSource = observerExpenditureDetailsList.Where(t =>
-                                    t.ExpenseID.ToLower().Contains(texttosearch)
-                                    || t.expDate.ToLower().Contains(texttosearch)
-                                    //|| t.expCode.ToLower().Contains(texttosearch)
-                                    || t.amtType.ToLower().Contains(texttosearch)
-                                    || t.amount.ToLower().Contains(texttosearch)
-                                    || t.paymentDate.ToLower().Contains(texttosearch)
-                                    || t.voucherBillNumber.ToLower().Contains(texttosearch)
-                                    || t.payMode.ToLower().Contains(texttosearch)
-                                    || t.payeeName.ToLower().Contains(texttosearch)
-                                    //|| t.EnteredOn.ToLower().Contains(texttosearch)
-                                    || t.payeeAddress.ToLower().Contains(texttosearch)
-                                    || t.sourceMoney.ToLower().Contains(texttosearch)
-                                    || t.remarks.ToLower().Contains(texttosearch)
-                                    || t.DtTm.ToLower().Contains(texttosearch)
-                                    || t.ExpStatus.ToLower().Contains(texttosearch)
-                                    || t.ExpTypeName.ToLower().Contains(texttosearch)
-                                    || t.ExpTypeNameLocal.ToLower().Contains(texttosearch)
-                                    || t.PayModeName.ToLower().Contains(texttosearch)
-                                    || t.PayModeNameLocal.ToLower().Contains(texttosearch)
-                                ).ToList();
-
+                return; // Page or controls are disposed, do nothing.
             }
-            else
+
+            try
             {
-                if (expensestype.Equals("type"))
+                string texttosearch = searchbar_expendituredetails.Text?.ToLower().Trim() ?? string.Empty;
+
+                if (!string.IsNullOrEmpty(texttosearch))
                 {
-                    loadtypewisedata(expensesvalue);
+                    // Data List Check: Ensure the source list is not null.
+                    if (observerExpenditureDetailsList == null)
+                    {
+                        listView_expendituredetails.ItemsSource = null;
+                        return;
+                    }
+
+                    var filteredList = observerExpenditureDetailsList.Where(t =>
+                        (t.ExpenseID?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.expDate?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.amtType?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.amount?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.paymentDate?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.voucherBillNumber?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.payMode?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.payeeName?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.payeeAddress?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.sourceMoney?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.remarks?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.DtTm?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.ExpStatus?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.ExpTypeName?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.ExpTypeNameLocal?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.PayModeName?.ToLower().Contains(texttosearch) ?? false)
+                        || (t.PayModeNameLocal?.ToLower().Contains(texttosearch) ?? false)
+                    ).ToList();
+
+                    listView_expendituredetails.ItemsSource = filteredList;
                 }
-                else if (expensestype.Equals("date"))
+                else
                 {
-                    loaddatewisedata(expensesvalue);
+                    // If search text is empty, restore the original list.
+                    listView_expendituredetails.ItemsSource = observerExpenditureDetailsList;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it gracefully.
+                Console.WriteLine($"An error occurred during search: {ex.Message}");
+                // Optionally, restore the original list to prevent a crash state.
+                if (listView_expendituredetails != null)
+                {
+                    listView_expendituredetails.ItemsSource = observerExpenditureDetailsList;
                 }
             }
         }
@@ -183,6 +204,8 @@ namespace CERS.Observer
 
         private async void btn_remarks_Clicked(object sender, EventArgs e)
         {
+            if (this.Handler == null) return;
+
             Button b = (Button)sender;
             string id = b.CommandParameter.ToString();
             expenseid = id;
@@ -199,6 +222,9 @@ namespace CERS.Observer
                 var service = new HitServices();
                 Loading_activity.IsVisible = true;
                 int response_remarks = await service.Remarks_Get(expenseid);
+
+                if (this.Handler == null) return;
+
                 Loading_activity.IsVisible = false;
 
 
@@ -264,6 +290,8 @@ namespace CERS.Observer
 
         private async void imgbtn_viewpdf_Clicked(object sender, EventArgs e)
         {
+            if (this.Handler == null) return;
+
             ImageButton b = (ImageButton)sender;
             string id = b.CommandParameter.ToString();
             expenseid = id;
@@ -276,7 +304,9 @@ namespace CERS.Observer
             }
             else
             {
+                if (this.Handler == null) return;
                 await Application.Current.MainPage.DisplayAlert(App.AppName, App.NoInternet_, App.Btn_Close);
+                if (this.Handler == null) return;
                 Loading_activity.IsVisible = false;
             }
 
@@ -309,13 +339,17 @@ namespace CERS.Observer
 
         private async void PopupreplyremarksyesBtn_Clicked(object sender, EventArgs e)
         {
+            if (this.Handler == null) return;
+
             if (string.IsNullOrEmpty(entry_remarks.Text))
             {
+                if (this.Handler == null) return;
                 await DisplayAlert(App.GetLabelByKey("AppName"), App.GetLabelByKey("Remarks"), App.GetLabelByKey("Close"));
                 return;
             }
             if (entry_remarks.Text.Length == 0)
             {
+                if (this.Handler == null) return;
                 await DisplayAlert(App.GetLabelByKey("AppName"), App.GetLabelByKey("Remarks"), App.GetLabelByKey("Close"));
                 return;
             }
@@ -324,9 +358,12 @@ namespace CERS.Observer
                 Loading_activity.IsVisible = true;
                 var service = new HitServices();
                 int response_saveobsrem = await service.SaveObserverRemarks_Post(expenseid, ObserverId, entry_remarks.Text);
+                if (this.Handler == null) return;
+
                 if (response_saveobsrem == 200)
                 {
                     int reposnse_obserexp = await service.ObserverExpenditureDetails_Get(autoid);
+                    if (this.Handler == null) return;
                     Loading_activity.IsVisible = false;
                 }
 
@@ -378,13 +415,17 @@ namespace CERS.Observer
 
         private async void PopupeditremarksyesBtn_Clicked(object sender, EventArgs e)
         {
+            if (this.Handler == null) return;
+
             if (string.IsNullOrEmpty(entry_editremarks.Text))
             {
+                if (this.Handler == null) return;
                 await DisplayAlert(App.GetLabelByKey("AppName"), App.GetLabelByKey("Remarks"), App.GetLabelByKey("Close"));
                 return;
             }
             if (entry_editremarks.Text.Length == 0)
             {
+                if (this.Handler == null) return;
                 await DisplayAlert(App.GetLabelByKey("AppName"), App.GetLabelByKey("Remarks"), App.GetLabelByKey("Close"));
                 return;
             }
@@ -393,14 +434,19 @@ namespace CERS.Observer
                 Loading_activity.IsVisible = true;
                 var service = new HitServices();
                 int response_saveobsrem = await service.UpdateObserverRemarks_Post(expenseid, ObserverRemarksId, entry_editremarks.Text);
+                if (this.Handler == null) return;
+
                 if (response_saveobsrem == 200)
                 {
                     int reposnse_obserexp = await service.ObserverExpenditureDetails_Get(autoid);
+                    if (this.Handler == null) return;
                     Loading_activity.IsVisible = false;
                 }
 
+                if (this.Handler == null) return;
                 await Navigation.PopAsync();
             }
+            if (this.Handler == null) return;
             Loading_activity.IsVisible = false;
         }
 
