@@ -15,6 +15,7 @@ namespace CERS
         string expensestype;
         string expensesvalue;
         ExpenditureDetailsDatabase expenditureDetailsDatabase = new ExpenditureDetailsDatabase();
+        private List<ExpenditureDetails> _allExpenditures; // Master list for filtering
         List<ExpenditureDetails> expenditureDetailslist;
         UserDetailsDatabase userDetailsDatabase = new UserDetailsDatabase();
         List<UserDetails> userDetails;
@@ -88,7 +89,8 @@ namespace CERS
 
             if (this.Handler == null) return;
 
-            expenditureDetailslist = result;
+            _allExpenditures = result;
+            expenditureDetailslist = new List<ExpenditureDetails>(_allExpenditures);
             listView_expendituredetails.ItemsSource = expenditureDetailslist;
             if (App.Language == 0)
             {
@@ -135,7 +137,8 @@ namespace CERS
 
             if (this.Handler == null) return;
 
-            expenditureDetailslist = result;
+            _allExpenditures = result;
+            expenditureDetailslist = new List<ExpenditureDetails>(_allExpenditures);
             lbl_heading.Text = App.GetLabelByKey("lbl_expdate") + " - " + expdatetodisplayvalue;
             listView_expendituredetails.ItemsSource = expenditureDetailslist;
         }
@@ -152,16 +155,11 @@ namespace CERS
             {
                 string texttosearch = searchbar_expendituredetails.Text?.ToLower().Trim() ?? string.Empty;
 
+                if (_allExpenditures == null) return; // Don't search if master list isn't ready
+
                 if (!string.IsNullOrEmpty(texttosearch))
                 {
-                    // Data List Check: Ensure the source list is not null.
-                    if (expenditureDetailslist == null)
-                    {
-                        listView_expendituredetails.ItemsSource = null;
-                        return;
-                    }
-
-                    var filteredList = expenditureDetailslist.Where(t =>
+                    var filteredList = _allExpenditures.Where(t =>
                         (t.ExpenseID?.ToLower().Contains(texttosearch) ?? false)
                         || (t.expDate?.ToLower().Contains(texttosearch) ?? false)
                         || (t.amtType?.ToLower().Contains(texttosearch) ?? false)
@@ -185,8 +183,8 @@ namespace CERS
                 }
                 else
                 {
-                    // If search text is empty, restore the original list.
-                    listView_expendituredetails.ItemsSource = expenditureDetailslist;
+                    // If search text is empty, restore the original list from the master list.
+                    listView_expendituredetails.ItemsSource = _allExpenditures;
                 }
             }
             catch (Exception ex)
