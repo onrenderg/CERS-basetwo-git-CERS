@@ -77,7 +77,7 @@ namespace CERS.Observer
             }
             catch
             {
-              await Application.Current.MainPage.DisplayAlert(App.GetLabelByKey("AppName"),"No Email client found on the device", App.Btn_Close);
+              await Application.Current!.MainPage!.DisplayAlert(App.GetLabelByKey("AppName"),"No Email client found on the device", App.Btn_Close);
             }
 
         }
@@ -97,7 +97,7 @@ namespace CERS.Observer
                 Preferences.Set("Active", 0);
                 Preferences.Set("OBSERVOROTPVERIFIED", "N");
                 observorLoginDetailsDatabase.DeleteObservorLoginDetails();
-                Application.Current.MainPage = new NavigationPage(new LoginPage());
+                Application.Current!.MainPage = new NavigationPage(new LoginPage());
             }
         }
         private void languageTapped(object sender, EventArgs e)
@@ -108,7 +108,7 @@ namespace CERS.Observer
         private void Tab_Home_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 0);
-            Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
         }
 
         private  void Tab_New_Tapped(object sender, EventArgs e)
@@ -119,7 +119,7 @@ namespace CERS.Observer
         private void Tab_Settings_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 2);
-            Application.Current.MainPage = new NavigationPage(new ObserverMorePage());
+            Application.Current!.MainPage = new NavigationPage(new ObserverMorePage());
 
         }
     }

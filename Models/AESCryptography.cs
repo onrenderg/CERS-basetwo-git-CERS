@@ -13,7 +13,7 @@ namespace CERS
             {
                 string key = Preferences.Get("EncKey", "xxxxxxxxxxxxxxxx"); ;
                 var plainBytes = Encoding.UTF8.GetBytes(plainText);
-                return Convert.ToBase64String(Encrypt(plainBytes, getRijndaelManaged(key)));
+                return Convert.ToBase64String(Encrypt(plainBytes, getAesManaged(key)));
             }
             catch (Exception)
             {
@@ -26,36 +26,35 @@ namespace CERS
             {
                 string key = Preferences.Get("EncKey", "xxxxxxxxxxxxxxxx"); ;
                 var encryptedBytes = Convert.FromBase64String(encryptedText);
-                return Encoding.UTF8.GetString(Decrypt(encryptedBytes, getRijndaelManaged(key)));
+                return Encoding.UTF8.GetString(Decrypt(encryptedBytes, getAesManaged(key)));
             }
             catch (Exception)
             {
                 return  "";
             }
         }
-        private static RijndaelManaged getRijndaelManaged(string secretKey)
+        private static Aes getAesManaged(string secretKey)
         {
             var keyBytes = new byte[16];
             var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
             Array.Copy(secretKeyBytes, keyBytes, Math.Min(keyBytes.Length, secretKeyBytes.Length));
-            return new RijndaelManaged
-            {
-                Mode = CipherMode.CBC,
-                Padding = PaddingMode.PKCS7,
-                KeySize = 128,
-                BlockSize = 128,
-                Key = keyBytes,
-                IV = keyBytes
-            };
+            var aes = Aes.Create();
+            aes.Mode = CipherMode.CBC;
+            aes.Padding = PaddingMode.PKCS7;
+            aes.KeySize = 128;
+            aes.BlockSize = 128;
+            aes.Key = keyBytes;
+            aes.IV = keyBytes;
+            return aes;
         }
-        private static byte[] Encrypt(byte[] plainBytes, RijndaelManaged rijndaelManaged)
+        private static byte[] Encrypt(byte[] plainBytes, Aes aes)
         {
-            return rijndaelManaged.CreateEncryptor()
+            return aes.CreateEncryptor()
                 .TransformFinalBlock(plainBytes, 0, plainBytes.Length);
         }
-        private static byte[] Decrypt(byte[] encryptedData, RijndaelManaged rijndaelManaged)
+        private static byte[] Decrypt(byte[] encryptedData, Aes aes)
         {
-            return rijndaelManaged.CreateDecryptor()
+            return aes.CreateDecryptor()
                 .TransformFinalBlock(encryptedData, 0, encryptedData.Length);
         }
     }

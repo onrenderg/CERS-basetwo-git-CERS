@@ -13,19 +13,19 @@ namespace CERS.Observer
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ObserverDashboardPage : ContentPage
     {
-        public Label[] Footer_Labels;
-        public string[] Footer_Image_Source;
-        public Image[] Footer_Images;
+        public Label[] Footer_Labels = new Label[3];
+        public string[] Footer_Image_Source = new string[3];
+        public Image[] Footer_Images = new Image[3];
 
         ObserverWardsDatabase observerWardsDatabase=new ObserverWardsDatabase();
-        List<ObserverWards> observerWardslist;
-        string panchayatcode;
+        List<ObserverWards> observerWardslist = new();
+        string panchayatcode = string.Empty;
         ObserverCandidatesDatabase observerCandidatesDatabase=new ObserverCandidatesDatabase();
-        List<ObserverCandidates> observerCandidateslist, observerCandidatestotalamountlist;
-        string mobilenumber;
+        List<ObserverCandidates> observerCandidateslist = new(), observerCandidatestotalamountlist = new();
+        string mobilenumber = string.Empty;
         
         ObservorLoginDetailsDatabase observorLoginDetailsDatabase = new ObservorLoginDetailsDatabase();
-        List<ObservorLoginDetails> observorLoginDetailslist; 
+        List<ObservorLoginDetails> observorLoginDetailslist = new(); 
 
         bool isRowEven;
 
@@ -84,13 +84,13 @@ namespace CERS.Observer
             var service = new HitServices();
             await service.ObserverWards_Get(mobilenumber);
             Loading_activity.IsVisible = false;
-            Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());                       
+            Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());                       
         }
 
         private void Tab_Home_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 0);
-            Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
         }
 
         private  void Tab_New_Tapped(object sender, EventArgs e)
@@ -101,7 +101,7 @@ namespace CERS.Observer
         private void Tab_Settings_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 2);
-            Application.Current.MainPage = new NavigationPage(new ObserverMorePage());
+            Application.Current!.MainPage = new NavigationPage(new ObserverMorePage());
 
         }
 
@@ -173,15 +173,17 @@ namespace CERS.Observer
         private async void listView_candidatedetails_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var currentRecord = e.Item as ObserverCandidates;
-            string autoid=currentRecord.AUTO_ID.ToString();
-            var service = new HitServices();
-
-            int reposnse_obserexp = await service.ObserverExpenditureDetails_Get(autoid);
-            if (reposnse_obserexp == 200)
+            if (currentRecord != null)
             {
-                await Navigation.PushAsync(new ExpenditureDateTypewiselistPage(autoid));
-            }
+                string autoid = currentRecord.AUTO_ID.ToString();
+                var service = new HitServices();
 
+                int reposnse_obserexp = await service.ObserverExpenditureDetails_Get(autoid);
+                if (reposnse_obserexp == 200)
+                {
+                    await Navigation.PushAsync(new ExpenditureDateTypewiselistPage(autoid));
+                }
+            }
         }
 
         protected override void OnAppearing()

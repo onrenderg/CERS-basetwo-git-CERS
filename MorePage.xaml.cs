@@ -77,7 +77,7 @@ namespace CERS
             }
             catch
             {
-                await Application.Current.MainPage.DisplayAlert(App.GetLabelByKey("AppName"), "No Email client found on the device", App.Btn_Close);
+                await Application.Current!.MainPage!.DisplayAlert(App.GetLabelByKey("AppName"), "No Email client found on the device", App.Btn_Close);
             }
 
 
@@ -100,7 +100,7 @@ namespace CERS
                 Preferences.Set("Active", 0);
                 Preferences.Set("USEROTPVERIFIED", "N");
                 userDetailsDatabase.DeleteUserDetails();                
-                Application.Current.MainPage = new NavigationPage(new LoginPage());
+                Application.Current!.MainPage = new NavigationPage(new LoginPage());
             }
         }
         private void languageTapped(object sender, EventArgs e)
@@ -111,7 +111,7 @@ namespace CERS
         private void Tab_Home_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 0);
-            Application.Current.MainPage = new NavigationPage(new DashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new DashboardPage());
         }
 
         private void Tab_New_Tapped(object sender, EventArgs e)
@@ -130,7 +130,7 @@ namespace CERS
             // else
             // {
                 Preferences.Set("Active", 1);
-                Application.Current.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
+                Application.Current!.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
             // }
 
         }
@@ -138,7 +138,7 @@ namespace CERS
         private void Tab_Settings_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 2);
-            Application.Current.MainPage = new NavigationPage(new MorePage());
+            Application.Current!.MainPage = new NavigationPage(new MorePage());
 
         }
     }

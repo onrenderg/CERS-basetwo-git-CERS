@@ -1,20 +1,20 @@
-﻿namespace CERS.Models
+namespace CERS.Models
 {
     public class ViewAllRemarks
     {
-        public string ExpenseId { get; set; }
-        public string UserRemarksId { get; set; }
-        public string ObserverRemarksId { get; set; }
-        public string ObserverRemarks { get; set; }
-        public string UserRemarks { get; set; }
-        public string UserRemarksDtTm { get; set; }
-        public string ObserverRemarksDtTm { get; set; }
-        public string ExpenseObserverRemId { get; set; }
-        public string imgreplyvisibility { get; set; }
-        public string RepliedDatetime { get; set; }
-        public string lblRepliedDatetime { get; set; }
-        public string lblUserRemarks { get; set; }
-        public string lblObserverRemarks { get; set; }
-        public string imgeditvisibility { get; set; }
+        public string ExpenseId { get; set; } = string.Empty;
+        public string UserRemarksId { get; set; } = string.Empty;
+        public string ObserverRemarksId { get; set; } = string.Empty;
+        public string ObserverRemarks { get; set; } = string.Empty;
+        public string UserRemarks { get; set; } = string.Empty;
+        public string UserRemarksDtTm { get; set; } = string.Empty;
+        public string ObserverRemarksDtTm { get; set; } = string.Empty;
+        public string ExpenseObserverRemId { get; set; } = string.Empty;
+        public string imgreplyvisibility { get; set; } = string.Empty;
+        public string RepliedDatetime { get; set; } = string.Empty;
+        public string lblRepliedDatetime { get; set; } = string.Empty;
+        public string lblUserRemarks { get; set; } = string.Empty;
+        public string lblObserverRemarks { get; set; } = string.Empty;
+        public string imgeditvisibility { get; set; } = string.Empty;
     }
 }

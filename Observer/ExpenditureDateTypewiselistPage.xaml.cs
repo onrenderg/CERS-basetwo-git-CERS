@@ -13,18 +13,18 @@ namespace CERS.Observer
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ExpenditureDateTypewiselistPage : ContentPage
     {
-        string candidateid; 
+        string candidateid = string.Empty; 
       
-        public Label[] Footer_Labels;
-        public string[] Footer_Image_Source;
-        public Image[] Footer_Images;
+        public Label[] Footer_Labels = new Label[3];
+        public string[] Footer_Image_Source = new string[3];
+        public Image[] Footer_Images = new Image[3];
         ObserverExpenditureDetailsDatabase expenditureDetailsDatabase = new ObserverExpenditureDetailsDatabase();
-        List<ObserverExpenditureDetails> expenditureDetailslist,  expenditureDetailstotalamountlist;
+        List<ObserverExpenditureDetails> expenditureDetailslist = new(),  expenditureDetailstotalamountlist = new();
         private bool isRowEven;
-        string  totalamount;
+        string  totalamount = string.Empty;
 
         ObservorLoginDetailsDatabase observorLoginDetailsDatabase = new ObservorLoginDetailsDatabase();
-        List<ObservorLoginDetails> observorLoginDetailslist;
+        List<ObservorLoginDetails> observorLoginDetailslist = new();
 
         public ExpenditureDateTypewiselistPage(string autoid)
         {
@@ -173,7 +173,7 @@ namespace CERS.Observer
         private void Tab_Home_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 0);
-            Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
         }
 
         private  void Tab_New_Tapped(object sender, EventArgs e)
@@ -184,7 +184,7 @@ namespace CERS.Observer
         private void Tab_Settings_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 2);
-            Application.Current.MainPage = new NavigationPage(new ObserverMorePage());
+            Application.Current!.MainPage = new NavigationPage(new ObserverMorePage());
 
         }
 
@@ -198,7 +198,7 @@ namespace CERS.Observer
             await service.userlogin_Get(usermobileno.Trim());
             userDetailsDatabase.UpdateCustomquery("update userDetails set IsLoggedIn='Y'");*/
             Loading_activity.IsVisible = false;
-            Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
         }
 
         private void rb_exp_CheckedChanged(object sender, CheckedChangedEventArgs e)
@@ -217,20 +217,22 @@ namespace CERS.Observer
         private void listView_expendituredetailstypewise_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var currentRecord = e.Item as ObserverExpenditureDetails;
-            string expendselected;
-            if (rb_exptype.IsChecked)
+            if (currentRecord != null)
             {
-                string expCode = currentRecord.expCode.ToString();
-                expendselected = "type";
-                Navigation.PushAsync(new ObserverViewExpenditureDetailsPage(candidateid,expendselected, expCode, ""));
-
-            }
-            else if (rb_expdate.IsChecked)
-            {
-                string expdate = currentRecord.expDate.ToString();
-                string expdatetodisplay = currentRecord.expDateDisplay.ToString();
-                expendselected = "date";
-                Navigation.PushAsync(new ObserverViewExpenditureDetailsPage(candidateid,expendselected, expdate, expdatetodisplay));
+                string expendselected;
+                if (rb_exptype.IsChecked)
+                {
+                    string expCode = currentRecord.expCode.ToString();
+                    expendselected = "type";
+                    Navigation.PushAsync(new ObserverViewExpenditureDetailsPage(candidateid, expendselected, expCode, ""));
+                }
+                else if (rb_expdate.IsChecked)
+                {
+                    string expdate = currentRecord.expDate.ToString();
+                    string expdatetodisplay = currentRecord.expDateDisplay.ToString();
+                    expendselected = "date";
+                    Navigation.PushAsync(new ObserverViewExpenditureDetailsPage(candidateid, expendselected, expdate, expdatetodisplay));
+                }
             }
         }
 

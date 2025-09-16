@@ -13,19 +13,19 @@ namespace CERS
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddExpenditureDetailsPage : ContentPage
     {
-        public Label[] Footer_Labels;
-        public string[] Footer_Image_Source;
-        public Image[] Footer_Images;
-        string expendituredateselected, paymentdateselected;
+        public Label[] Footer_Labels = new Label[3];
+        public string[] Footer_Image_Source = new string[3];
+        public Image[] Footer_Images = new Image[3];
+        string expendituredateselected = string.Empty, paymentdateselected = string.Empty;
         UserDetailsDatabase userDetailsDatabase = new UserDetailsDatabase();
-        List<UserDetails> userDetails;
-        string AUTO_ID;
+        List<UserDetails> userDetails = new();
+        string AUTO_ID = string.Empty;
         ExpenseSourcesDatabase expenseSourcesDatabase = new ExpenseSourcesDatabase();
-        List<ExpenseSources> expenseSourceslist;
+        List<ExpenseSources> expenseSourceslist = new();
         PaymentModesDatabase paymentModesDatabase = new PaymentModesDatabase();
-        List<PaymentModes> paymentModeslist;
-        string expendituresourcecode, paymodecode;
-        string doc1;
+        List<PaymentModes> paymentModeslist = new();
+        string expendituresourcecode = string.Empty, paymodecode = string.Empty;
+        string doc1 = string.Empty;
 
         public AddExpenditureDetailsPage()
         {
@@ -124,22 +124,22 @@ namespace CERS
 
             }
         }
-        private void editor_exptype_Focused(object sender, FocusEventArgs e)
+        private void editor_exptype_Focused(object? sender, FocusEventArgs e)
         {
             editor_exptype.Unfocus();
             popupexptype.IsVisible = true;
             listview_exptype.ItemsSource = expenseSourceslist;
         }
 
-        private void listview_exptype_ItemTapped(object sender, ItemTappedEventArgs e)
+        private void listview_exptype_ItemTapped(object? sender, ItemTappedEventArgs e)
         {
             var currentrecord = e.Item as ExpenseSources;
-            editor_exptype.Text = currentrecord.Exp_Desc;
-            expendituresourcecode = currentrecord.Exp_code;
+            editor_exptype.Text = currentrecord?.Exp_Desc ?? "";
+            expendituresourcecode = currentrecord?.Exp_code ?? "";
             popupexptype.IsVisible = false;
         }
 
-        private void SearchBar_exptype_TextChanged(object sender, TextChangedEventArgs e)
+        private void SearchBar_exptype_TextChanged(object? sender, TextChangedEventArgs e)
         {
             if (!string.IsNullOrEmpty(SearchBar_exptype.Text))
             {
@@ -159,12 +159,12 @@ namespace CERS
             }
         }
 
-        private void popupexptypeCancel_Clicked(object sender, EventArgs e)
+        private void popupexptypeCancel_Clicked(object? sender, EventArgs e)
         {
             popupexptype.IsVisible = false;
         }
 
-        private void Entry_expdate_Focused(object sender, FocusEventArgs e)
+        private void Entry_expdate_Focused(object? sender, FocusEventArgs e)
         {
             Entry_expdate.Unfocus();
             MainThread.BeginInvokeOnMainThread(() =>
@@ -182,7 +182,7 @@ namespace CERS
             });
         }
 
-        private void datepicker_expdate_DateSelected(object sender, DateChangedEventArgs e)
+        private void datepicker_expdate_DateSelected(object? sender, DateChangedEventArgs e)
         {
             expendituredateselected = e.NewDate.ToString("yyyy/MM/dd").Replace('-', '/');
             Entry_expdate.Text = e.NewDate.ToString("dd/MM/yyyy").Replace('-', '/');
@@ -190,7 +190,7 @@ namespace CERS
         }
 
 
-        private void Entry_paymentdate_Focused(object sender, FocusEventArgs e)
+        private void Entry_paymentdate_Focused(object? sender, FocusEventArgs e)
         {
             Entry_paymentdate.Unfocus();
             MainThread.BeginInvokeOnMainThread(() =>
@@ -204,7 +204,7 @@ namespace CERS
                 catch { }
             });
         }
-        private void picker_payMode_SelectedIndexChanged(object sender, EventArgs e)
+        private void picker_payMode_SelectedIndexChanged(object? sender, EventArgs e)
         {
             if (picker_payMode.SelectedIndex != -1)
             {
@@ -230,19 +230,19 @@ namespace CERS
             }
         }
 
-        private void datepicker_paymentdate_DateSelected(object sender, DateChangedEventArgs e)
+        private void datepicker_paymentdate_DateSelected(object? sender, DateChangedEventArgs e)
         {
             paymentdateselected = e.NewDate.ToString("yyyy/MM/dd").Replace('-', '/');
             Entry_paymentdate.Text = e.NewDate.ToString("dd/MM/yyyy").Replace('-', '/');
             Console.WriteLine("paymentdate====" + paymentdateselected);
         }
 
-        public async void btn_uploaddoc_Clicked(object sender, EventArgs e)
+        public async void btn_uploaddoc_Clicked(object? sender, EventArgs e)
         {
             await PickAndShow(PickOptions.Default, 1);
         }
 
-        async Task<FileResult> PickAndShow(PickOptions options, int docnumber)
+        async Task<FileResult?> PickAndShow(PickOptions options, int docnumber)
         {
             try
             {
@@ -284,7 +284,7 @@ namespace CERS
             return null;
         }
 
-        private async void btn_save_Clicked(object sender, EventArgs e)
+        private async void btn_save_Clicked(object? sender, EventArgs e)
         {
             if (await checkvalidtion())
             {
@@ -318,7 +318,7 @@ namespace CERS
                 {
                     Loading_activity.IsVisible = false;
 
-                    Application.Current.MainPage = new NavigationPage(new DashboardPage());
+                    Application.Current!.MainPage = new NavigationPage(new DashboardPage());
                 }
                 Loading_activity.IsVisible = false;
 
@@ -423,20 +423,20 @@ namespace CERS
                  return true;
              }
          }*/
-        private void Tab_Home_Tapped(object sender, EventArgs e)
+        private void Tab_Home_Tapped(object? sender, EventArgs e)
         {
             Preferences.Set("Active", 0);
-            Application.Current.MainPage = new NavigationPage(new DashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new DashboardPage());
         }
-        private void Tab_New_Tapped(object sender, EventArgs e)
+        private void Tab_New_Tapped(object? sender, EventArgs e)
         {
             Preferences.Set("Active", 1);
-            Application.Current.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
+            Application.Current!.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
         }
-        private void Tab_Settings_Tapped(object sender, EventArgs e)
+        private void Tab_Settings_Tapped(object? sender, EventArgs e)
         {
             Preferences.Set("Active", 2);
-            Application.Current.MainPage = new NavigationPage(new MorePage());
+            Application.Current!.MainPage = new NavigationPage(new MorePage());
         }
     }
 }

@@ -11,22 +11,22 @@ namespace CERS
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ViewExpenditureDetailsPage : ContentPage
     {
-        string query;
-        string expensestype;
-        string expensesvalue;
+        string query = string.Empty;
+        string expensestype = string.Empty;
+        string expensesvalue = string.Empty;
         ExpenditureDetailsDatabase expenditureDetailsDatabase = new ExpenditureDetailsDatabase();
-        private List<ExpenditureDetails> _allExpenditures; // Master list for filtering
-        List<ExpenditureDetails> expenditureDetailslist;
+        private List<ExpenditureDetails> _allExpenditures = new(); // Master list for filtering
+        List<ExpenditureDetails> expenditureDetailslist = new();
         UserDetailsDatabase userDetailsDatabase = new UserDetailsDatabase();
-        List<UserDetails> userDetails;
-        string expdatetodisplayvalue;
-        string expenseid;
-      //  string ExpenseObserverRemId;
+        List<UserDetails> userDetails = new();
+        string expdatetodisplayvalue = string.Empty;
+        string expenseid = string.Empty;
+        //  string ExpenseObserverRemId;
 
         ViewAllRemarksDatabase viewAllRemarksDatabase = new ViewAllRemarksDatabase();
-        List<ViewAllRemarks> viewAllRemarkslist;
-        string ObserverRemarksId;
-        string expensesid;
+        List<ViewAllRemarks> viewAllRemarkslist = new();
+        string ObserverRemarksId = string.Empty;
+        string expensesid = string.Empty;
 
         public ViewExpenditureDetailsPage(string expendselected, string expvalue, string expdatetodispvalue)
         {
@@ -54,7 +54,7 @@ namespace CERS
             searchbar_expendituredetails.Placeholder = App.GetLabelByKey("Search");
         }
 
-        private void OnPageAppearing(object sender, EventArgs e)
+        private void OnPageAppearing(object? sender, EventArgs e)
         {
             if (searchbar_expendituredetails != null)
             {
@@ -62,7 +62,7 @@ namespace CERS
             }
         }
 
-        private void OnPageDisappearing(object sender, EventArgs e)
+        private void OnPageDisappearing(object? sender, EventArgs e)
         {
             try
             {
@@ -143,7 +143,7 @@ namespace CERS
                 Console.WriteLine($"loadtypewisedata: Loaded {expenditureDetailslist?.Count ?? 0} items");
                 
                 // Set ItemsSource with delay to ensure CollectionView is ready
-                Device.BeginInvokeOnMainThread(async () =>
+                Dispatcher.Dispatch(async () =>
                 {
                     await Task.Delay(50);
                     if (this.Handler != null && listView_expendituredetails != null)
@@ -218,7 +218,7 @@ namespace CERS
                 }
                 
                 // Set ItemsSource with delay to ensure CollectionView is ready
-                Device.BeginInvokeOnMainThread(async () =>
+                Dispatcher.Dispatch(async () =>
                 {
                     await Task.Delay(50);
                     if (this.Handler != null && listView_expendituredetails != null)
@@ -235,7 +235,7 @@ namespace CERS
             }
         }
 
-        private void searchbar_expendituredetails_TextChanged(object sender, TextChangedEventArgs e)
+        private void searchbar_expendituredetails_TextChanged(object? sender, TextChangedEventArgs e)
         {
             // MAUI Lifecycle Check: Ensure the page and controls are still valid
             if (this.Handler == null || searchbar_expendituredetails == null || listView_expendituredetails == null)
@@ -254,23 +254,23 @@ namespace CERS
                     string texttosearch = searchbar_expendituredetails.Text.ToLower().Trim();
 
                     var filteredList = expenditureDetailslist.Where(t => t != null && (
-                        (t.ExpenseID?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.expDate?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.amtType?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.amount?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.paymentDate?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.voucherBillNumber?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.payMode?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.payeeName?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.payeeAddress?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.sourceMoney?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.remarks?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.DtTm?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.ExpStatus?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.ExpTypeName?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.ExpTypeNameLocal?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.PayModeName?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.PayModeNameLocal?.ToLower().Contains(texttosearch) ?? false)
+                        (t.ExpenseID?.ToLower().Contains(texttosearch) == true)
+                        || (t.expDate?.ToLower().Contains(texttosearch) == true)
+                        || (t.amtType?.ToLower().Contains(texttosearch) == true)
+                        || (t.amount?.ToLower().Contains(texttosearch) == true)
+                        || (t.paymentDate?.ToLower().Contains(texttosearch) == true)
+                        || (t.voucherBillNumber?.ToLower().Contains(texttosearch) == true)
+                        || (t.payMode?.ToLower().Contains(texttosearch) == true)
+                        || (t.payeeName?.ToLower().Contains(texttosearch) == true)
+                        || (t.payeeAddress?.ToLower().Contains(texttosearch) == true)
+                        || (t.sourceMoney?.ToLower().Contains(texttosearch) == true)
+                        || (t.remarks?.ToLower().Contains(texttosearch) == true)
+                        || (t.DtTm?.ToLower().Contains(texttosearch) == true)
+                        || (t.ExpStatus?.ToLower().Contains(texttosearch) == true)
+                        || (t.ExpTypeName?.ToLower().Contains(texttosearch) == true)
+                        || (t.ExpTypeNameLocal?.ToLower().Contains(texttosearch) == true)
+                        || (t.PayModeName?.ToLower().Contains(texttosearch) == true)
+                        || (t.PayModeNameLocal?.ToLower().Contains(texttosearch) == true)
                     )).ToList();
 
                     // Double-check before setting ItemsSource
@@ -307,8 +307,11 @@ namespace CERS
         private void btn_edit_Clicked(object sender, EventArgs e)
         {
             Button b = (Button)sender;
-            string id = b.CommandParameter.ToString();
-            Navigation.PushAsync(new EditExpenditureDetailsPage(id));
+            string? expenseid = (sender as Button)?.CommandParameter?.ToString();
+            if (!string.IsNullOrEmpty(expenseid))
+            {
+                Navigation.PushAsync(new EditExpenditureDetailsPage(expenseid));
+            }
         }
 
         private async void btn_ReplyToObserverRemarks_Clicked(object sender, EventArgs e)
@@ -316,7 +319,8 @@ namespace CERS
             if (this.Handler == null) return;
 
             Button b = (Button)sender;
-            string id = b.CommandParameter.ToString();
+            string? id = b.CommandParameter?.ToString();
+            if (string.IsNullOrEmpty(id)) return;
             expenseid = id;
             Loading_activity.IsVisible = true;
             var service = new HitServices();
@@ -353,14 +357,17 @@ namespace CERS
         private void img_viewimage_Clicked(object sender, EventArgs e)
         {
             ImageButton b = (ImageButton)sender;
-            string str = b.CommandParameter.ToString();
-            string[] a = str.Split(new char[] { '$' });
-            expensesid = a[0];
-            ObserverRemarksId = a[1];
+            string? str = b.CommandParameter?.ToString();
+            if (str != null)
+            {
+                string[] a = str.Split(new char[] { '$' });
+                expensesid = a[0];
+                ObserverRemarksId = a[1];
 
-            PopupreplyremarkscancelBtn.Text = App.GetLabelByKey("Cancel");
+                PopupreplyremarkscancelBtn.Text = App.GetLabelByKey("Cancel");
 
-            popupreplyremarks.IsVisible = true;
+                popupreplyremarks.IsVisible = true;
+            }
         }
 
         private void popupRemarksCancel_Clicked(object sender, EventArgs e)

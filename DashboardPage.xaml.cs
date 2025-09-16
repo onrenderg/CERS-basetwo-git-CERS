@@ -6,22 +6,21 @@ using System.Linq;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Xaml;
 
-
 namespace CERS
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DashboardPage : ContentPage
     {
         UserDetailsDatabase userDetailsDatabase = new UserDetailsDatabase();
-        List<UserDetails> userDetails;
-        public Label[] Footer_Labels;
-        public string[] Footer_Image_Source;
-        public Image[] Footer_Images;
+        List<UserDetails> userDetails = new();
+        public Label[] Footer_Labels = new Label[3];
+        public string[] Footer_Image_Source = new string[3];
+        public Image[] Footer_Images = new Image[3];
         ExpenditureDetailsDatabase expenditureDetailsDatabase = new ExpenditureDetailsDatabase();
-        List<ExpenditureDetails> expenditureDetailslist, expenditureDetailsformstatuslist, expenditureDetailstotalamountlist;
+        List<ExpenditureDetails> expenditureDetailslist = new(), expenditureDetailsformstatuslist = new(), expenditureDetailstotalamountlist = new();
         private bool isRowEven;
-        string usermobileno;
-        string expstatus;
+        string usermobileno = string.Empty;
+        string expstatus = string.Empty;
 
         public DashboardPage()
         {
@@ -230,14 +229,14 @@ namespace CERS
             }
             catch
             {
-                lbl_lastupdated.Text = App.GetLabelByKey("LastUpdated") + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+                // Handle exception silently
             }
         }
 
         private void Tab_Home_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 0);
-            Application.Current.MainPage = new NavigationPage(new DashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new DashboardPage());
         }
 
         private async void Tab_New_Tapped(object sender, EventArgs e)
@@ -259,13 +258,13 @@ namespace CERS
                     // else
                     // {
                         Preferences.Set("Active", 1);
-                        Application.Current.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
+                        Application.Current!.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
                     // }
                 }
                 catch
                 {
                     Preferences.Set("Active", 1);
-                    Application.Current.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
+                    Application.Current!.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
                 }
             }
             else
@@ -277,7 +276,7 @@ namespace CERS
         private void Tab_Settings_Tapped(object sender, EventArgs e)
         {
             Preferences.Set("Active", 2);
-            Application.Current.MainPage = new NavigationPage(new MorePage());
+            Application.Current!.MainPage = new NavigationPage(new MorePage());
         }
 
         private void ToolbarItem_Clicked(object sender, EventArgs e)
@@ -295,7 +294,7 @@ namespace CERS
             await service.userlogin_Get(usermobileno.Trim());
             userDetailsDatabase.UpdateCustomquery("update userDetails set IsLoggedIn='Y'");
             Loading_activity.IsVisible = false;
-            Application.Current.MainPage = new NavigationPage(new DashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new DashboardPage());
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
@@ -316,13 +315,13 @@ namespace CERS
                     // else
                     // {
                         Preferences.Set("Active", 1);
-                        Application.Current.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
+                        Application.Current!.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
                     // }
                 }
                 catch
                 {
                     Preferences.Set("Active", 1);
-                    Application.Current.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
+                    Application.Current!.MainPage = new NavigationPage(new AddExpenditureDetailsPage());
                 }
             }
             else
@@ -350,15 +349,15 @@ namespace CERS
             string expendselected;
             if (rb_exptype.IsChecked)
             {
-                string expCode = currentRecord.expCode.ToString();
+                string expCode = currentRecord?.expCode?.ToString() ?? "";
                 expendselected = "type";
                 Navigation.PushAsync(new ViewExpenditureDetailsPage(expendselected, expCode, ""));
 
             }
             else if (rb_expdate.IsChecked)
             {
-                string expdate = currentRecord.expDate.ToString();
-                string expdatetodisplay = currentRecord.expDateDisplay.ToString();
+                string expdate = currentRecord?.expDate?.ToString() ?? "";
+                string expdatetodisplay = currentRecord?.expDateDisplay?.ToString() ?? "";
                 expendselected = "date";
                 Navigation.PushAsync(new ViewExpenditureDetailsPage(expendselected, expdate, expdatetodisplay));
             }
@@ -380,10 +379,10 @@ namespace CERS
                     {
                         int response_finalsubmit = await service.finalsubmit(expenditureDetailslist.ElementAt(0).AutoID);
                         Loading_activity.IsVisible = false;
-                        await Application.Current.MainPage.DisplayAlert(App.AppName, Preferences.Get("FinalSubmitMsg", ""), App.Btn_Close);
+                        await Application.Current!.MainPage!.DisplayAlert(App.AppName, Preferences.Get("FinalSubmitMsg", ""), App.Btn_Close);
                         await service.ExpenditureDetails_Get();
 
-                        Application.Current.MainPage = new NavigationPage(new DashboardPage());
+                        Application.Current!.MainPage = new NavigationPage(new DashboardPage());
                     }
                     Loading_activity.IsVisible = false;
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Xaml;
@@ -21,7 +21,7 @@ namespace CERS
 
         private void ToolbarItem_Clicked(object sender, EventArgs e)
         {           
-            Application.Current.MainPage = new NavigationPage(new DashboardPage());          
+            Application.Current!.MainPage = new NavigationPage(new DashboardPage());          
         }
     }
 }

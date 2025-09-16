@@ -13,25 +13,25 @@ namespace CERS.Observer
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ObserverViewExpenditureDetailsPage : ContentPage
     {
-        string query;
-        string expensestype;
-        string expensesvalue;
+        string query = string.Empty;
+        string expensestype = string.Empty;
+        string expensesvalue = string.Empty;
         ObserverExpenditureDetailsDatabase observerExpenditureDetailsDatabase = new ObserverExpenditureDetailsDatabase();
-        private List<ObserverExpenditureDetails> _allExpenditures; // Master list for filtering
-        List<ObserverExpenditureDetails> observerExpenditureDetailsList;
+        private List<ObserverExpenditureDetails> _allExpenditures = new(); // Master list for filtering
+        List<ObserverExpenditureDetails> observerExpenditureDetailsList = new();
 
-        string expdatetodisplayvalue;
-        string expenseid;
-        string usermobile, ObserverId;
+        string expdatetodisplayvalue = string.Empty;
+        string expenseid = string.Empty;
+        string usermobile = string.Empty, ObserverId = string.Empty;
 
         ObservorLoginDetailsDatabase observorLoginDetailsDatabase = new ObservorLoginDetailsDatabase();
-        List<ObservorLoginDetails> observorLoginDetailslist;
-        string autoid;
+        List<ObservorLoginDetails> observorLoginDetailslist = new();
+        string autoid = string.Empty;
 
         ViewAllRemarksDatabase viewAllRemarksDatabase = new ViewAllRemarksDatabase();
-        List<ViewAllRemarks> viewAllRemarkslist, viewAllRemarkslist1;
-        string ObserverRemarksId;
-        string expensesid;
+        List<ViewAllRemarks> viewAllRemarkslist = new(), viewAllRemarkslist1 = new();
+        string ObserverRemarksId = string.Empty;
+        string expensesid = string.Empty;
 
 
         public ObserverViewExpenditureDetailsPage(string candidateid, string expendselected, string expvalue, string expdatetodispvalue)
@@ -160,7 +160,7 @@ namespace CERS.Observer
             listView_expendituredetails.ItemsSource = observerExpenditureDetailsList;
         }
 
-        private void searchbar_expendituredetails_TextChanged(object sender, TextChangedEventArgs e)
+        private void searchbar_expendituredetails_TextChanged(object? sender, TextChangedEventArgs e)
         {
             // MAUI Lifecycle Check: Ensure the page and controls are still valid.
             if (this.Handler == null || searchbar_expendituredetails == null || listView_expendituredetails == null)
@@ -177,23 +177,23 @@ namespace CERS.Observer
                 if (!string.IsNullOrEmpty(texttosearch))
                 {
                     var filteredList = _allExpenditures.Where(t =>
-                        (t.ExpenseID?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.expDate?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.amtType?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.amount?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.paymentDate?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.voucherBillNumber?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.payMode?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.payeeName?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.payeeAddress?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.sourceMoney?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.remarks?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.DtTm?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.ExpStatus?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.ExpTypeName?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.ExpTypeNameLocal?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.PayModeName?.ToLower().Contains(texttosearch) ?? false)
-                        || (t.PayModeNameLocal?.ToLower().Contains(texttosearch) ?? false)
+                        (t.ExpenseID?.ToLower().Contains(texttosearch) == true)
+                        || (t.expDate?.ToLower().Contains(texttosearch) == true)
+                        || (t.amtType?.ToLower().Contains(texttosearch) == true)
+                        || (t.amount?.ToLower().Contains(texttosearch) == true)
+                        || (t.paymentDate?.ToLower().Contains(texttosearch) == true)
+                        || (t.voucherBillNumber?.ToLower().Contains(texttosearch) == true)
+                        || (t.payMode?.ToLower().Contains(texttosearch) == true)
+                        || (t.payeeName?.ToLower().Contains(texttosearch) == true)
+                        || (t.payeeAddress?.ToLower().Contains(texttosearch) == true)
+                        || (t.sourceMoney?.ToLower().Contains(texttosearch) == true)
+                        || (t.remarks?.ToLower().Contains(texttosearch) == true)
+                        || (t.DtTm?.ToLower().Contains(texttosearch) == true)
+                        || (t.ExpStatus?.ToLower().Contains(texttosearch) == true)
+                        || (t.ExpTypeName?.ToLower().Contains(texttosearch) == true)
+                        || (t.ExpTypeNameLocal?.ToLower().Contains(texttosearch) == true)
+                        || (t.PayModeName?.ToLower().Contains(texttosearch) == true)
+                        || (t.PayModeNameLocal?.ToLower().Contains(texttosearch) == true)
                     ).ToList();
 
                     listView_expendituredetails.ItemsSource = filteredList;
@@ -222,8 +222,8 @@ namespace CERS.Observer
             if (this.Handler == null) return;
 
             Button b = (Button)sender;
-            string id = b.CommandParameter.ToString();
-            expenseid = id;
+            string? id = b.CommandParameter?.ToString();
+            expenseid = id ?? "";
             lbl_remarks.Text = App.GetLabelByKey("Remarks") + "*";
             entry_remarks.Placeholder = App.GetLabelByKey("Remarks");
             popupRemarksCancel.Text = App.GetLabelByKey("Cancel");
@@ -308,8 +308,8 @@ namespace CERS.Observer
             if (this.Handler == null) return;
 
             ImageButton b = (ImageButton)sender;
-            string id = b.CommandParameter.ToString();
-            expenseid = id;
+            string? id = b.CommandParameter?.ToString();
+            expenseid = id ?? "";
             var service = new HitServices();
             var current = Connectivity.NetworkAccess;
             if (current == NetworkAccess.Internet)
@@ -320,7 +320,7 @@ namespace CERS.Observer
             else
             {
                 if (this.Handler == null) return;
-                await Application.Current.MainPage.DisplayAlert(App.AppName, App.NoInternet_, App.Btn_Close);
+                await Application.Current!.MainPage!.DisplayAlert(App.AppName, App.NoInternet_, App.Btn_Close);
                 if (this.Handler == null) return;
                 Loading_activity.IsVisible = false;
             }
@@ -331,11 +331,14 @@ namespace CERS.Observer
         private void img_viewimage_Clicked(object sender, EventArgs e)
         {
             ImageButton b = (ImageButton)sender;
-            string str = b.CommandParameter.ToString();
-            string[] a = str.Split(new char[] { '$' });
-            expensesid = a[0];
-            ObserverRemarksId = a[1];
-            popupreplyremarks.IsVisible = true;
+            string? str = b.CommandParameter?.ToString();
+            if (str != null)
+            {
+                string[] a = str.Split(new char[] { '$' });
+                expensesid = a[0];
+                ObserverRemarksId = a[1];
+                popupreplyremarks.IsVisible = true;
+            }
         }
         //
 
@@ -399,26 +402,29 @@ namespace CERS.Observer
         private void img_edit_Clicked(object sender, EventArgs e)
         {
             ImageButton b = (ImageButton)sender;
-            string str = b.CommandParameter.ToString();
-            string[] a = str.Split(new char[] { '$' });
-            expensesid = a[0];
-            ObserverRemarksId = a[1];
-
-            string obsremrks = string.Empty;
-
-            string query11 = $"Select ObserverRemarks from viewAllRemarks where ExpenseID='{expensesid}' and ObserverRemarksId='{ObserverRemarksId}'";
-            viewAllRemarkslist1 = viewAllRemarksDatabase.GetViewAllRemarks(query11).ToList();
-
-            if (viewAllRemarkslist1.Any())
+            string? str = b.CommandParameter?.ToString();
+            if (str != null)
             {
-                obsremrks = viewAllRemarkslist1.ElementAt(0).ObserverRemarks;
-            }
+                string[] a = str.Split(new char[] { '$' });
+                expensesid = a[0];
+                ObserverRemarksId = a[1];
 
-            entry_editremarks.Text = obsremrks;
-            lbl_editremarks.Text = App.GetLabelByKey("Remarks");
-            PopupeditremarksyesBtn.Text = App.GetLabelByKey("update");
-            PopupeditremarkscancelBtn.Text = App.GetLabelByKey("Cancel");
-            popupeditremarks.IsVisible = true;
+                string obsremrks = string.Empty;
+
+                string query11 = $"Select ObserverRemarks from viewAllRemarks where ExpenseID='{expensesid}' and ObserverRemarksId='{ObserverRemarksId}'";
+                viewAllRemarkslist1 = viewAllRemarksDatabase.GetViewAllRemarks(query11).ToList();
+
+                if (viewAllRemarkslist1.Any())
+                {
+                    obsremrks = viewAllRemarkslist1.ElementAt(0).ObserverRemarks;
+                }
+
+                entry_editremarks.Text = obsremrks;
+                lbl_editremarks.Text = App.GetLabelByKey("Remarks");
+                PopupeditremarksyesBtn.Text = App.GetLabelByKey("update");
+                PopupeditremarkscancelBtn.Text = App.GetLabelByKey("Cancel");
+                popupeditremarks.IsVisible = true;
+            }
             /* var service=new HitServices();
              int response_updaterem = await service.UpdateObserverRemarks_Post(expenseid, ObserverRemarksId, entry_remarks.Text);*/
         }

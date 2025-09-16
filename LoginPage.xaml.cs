@@ -14,8 +14,8 @@ namespace CERS
     public partial class LoginPage : ContentPage
     {
         UserDetailsDatabase userDetailsDatabase = new UserDetailsDatabase();
-        List<UserDetails> userDetailslist;
-        string usertype;
+        List<UserDetails> userDetailslist = new();
+        string usertype = string.Empty;
         public LoginPage()
         {
             InitializeComponent();
@@ -108,7 +108,7 @@ namespace CERS
                         Loading_activity.IsVisible = false;
                         /* if (response_getwards == 200)
                          {*/
-                        Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+                        Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
                         if (response_getwards == 404)
                         {
                             await DisplayAlert("CERS", "No Wards Mapped", App.Btn_Close);
@@ -231,13 +231,13 @@ namespace CERS
         private void Btn_NotMe_Clicked(object sender, EventArgs e)
         {
             userDetailsDatabase.DeleteUserDetails();
-            Application.Current.MainPage = new NavigationPage(new LoginPage());
+            Application.Current!.MainPage = new NavigationPage(new LoginPage());
         }
     
         private void Btn_Continue_Clicked(object sender, EventArgs e)
         {
             userDetailsDatabase.UpdateCustomquery("update userDetails set IsLoggedIn='Y'");
-            Application.Current.MainPage = new NavigationPage(new DashboardPage());
+            Application.Current!.MainPage = new NavigationPage(new DashboardPage());
         }
     }
 }

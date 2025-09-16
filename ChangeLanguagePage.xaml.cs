@@ -18,9 +18,9 @@ namespace CERS
     {
         LanguageMasterDatabase languageMasterDatabase = new LanguageMasterDatabase();
         SavePreferenceDatabase savePreferenceDatabase = new SavePreferenceDatabase();
-        List<SavePreferences> savePreferenceslist;
+        List<SavePreferences> savePreferenceslist = new();
         int languagecode;
-        string usertype;
+        string usertype = string.Empty;
        
         public ChangeLanguagePage(string usertpe)
         {
@@ -59,12 +59,12 @@ namespace CERS
             Preferences.Set("Active", 0);
             if (usertype.Equals("O"))
             {
-                Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+                Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
 
             }
             else
             {
-                Application.Current.MainPage = new NavigationPage(new DashboardPage());
+                Application.Current!.MainPage = new NavigationPage(new DashboardPage());
             }
 
         }
@@ -95,27 +95,27 @@ namespace CERS
             Preferences.Set("Active", 0);
             if (usertype.Equals("O"))
             {
-                Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+                Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
 
             }
             else
             {
-                Application.Current.MainPage = new NavigationPage(new DashboardPage());
+                Application.Current!.MainPage = new NavigationPage(new DashboardPage());
             }
 
         }
 
         private void ToolbarItem_Clicked(object sender, EventArgs e)
         {
-            //Application.Current.MainPage = new NavigationPage(new MainPage());
+            //Application.Current!.MainPage = new NavigationPage(new MainPage());
             if (usertype.Equals("O"))
             {
-                Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+                Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
 
             }
             else
             {
-                Application.Current.MainPage = new NavigationPage(new DashboardPage());
+                Application.Current!.MainPage = new NavigationPage(new DashboardPage());
             }
 
         }
@@ -134,12 +134,12 @@ namespace CERS
                 await DisplayAlert(App.AppName, App.GetLabelByKey("SuccesUpdated"), App.Btn_Close);
                 if (usertype.Equals("O"))
                 {
-                    Application.Current.MainPage = new NavigationPage(new ObserverDashboardPage());
+                    Application.Current!.MainPage = new NavigationPage(new ObserverDashboardPage());
 
                 }
                 else
                 {
-                    Application.Current.MainPage = new NavigationPage(new DashboardPage());
+                    Application.Current!.MainPage = new NavigationPage(new DashboardPage());
                 }
             }
             else

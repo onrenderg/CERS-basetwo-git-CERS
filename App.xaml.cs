@@ -20,13 +20,13 @@ namespace CERS
         public static string Btn_Close = "Close";
         public static int CurrentTabpageIndex;
         public static bool IsInForeground;
-        public static UserDetailsDatabase userDetailsDatabase;
+        public static UserDetailsDatabase userDetailsDatabase = new();
         public static int Language = 0;
-        public static List<LanguageMaster> MyLanguage;
-        public static SavePreferenceDatabase savePreferenceDatabase;
-        public static List<SavePreferences> savedUserPreferList;
-        public static LanguageMasterDatabase languageMasterDatabase;
-        ObservorLoginDetailsDatabase observorLoginDetailsDatabase;
+        public static List<LanguageMaster> MyLanguage = new();
+        public static SavePreferenceDatabase savePreferenceDatabase = new();
+        public static List<SavePreferences> savedUserPreferList = new();
+        public static LanguageMasterDatabase languageMasterDatabase = new();
+        ObservorLoginDetailsDatabase observorLoginDetailsDatabase = new();
 
         public App()
         {
