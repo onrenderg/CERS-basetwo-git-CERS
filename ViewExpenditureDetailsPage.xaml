@@ -14,20 +14,42 @@
         </StackLayout>
     </NavigationPage.TitleView>
     <Grid>
-        <StackLayout Margin="9">
-            <Label x:Name="lbl_heading0" FontSize="18" BackgroundColor="Navy" TextColor="White" FontAttributes="Bold" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"/>
-            <Label x:Name="lbl_heading" FontSize="18" BackgroundColor="Navy" TextColor="White" FontAttributes="Bold" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center"/>
+        <Grid Margin="9" RowDefinitions="Auto,Auto,Auto,*">
+            <Label Grid.Row="0" 
+                   x:Name="lbl_heading0" 
+                   FontSize="18" 
+                   BackgroundColor="Navy" 
+                   TextColor="White" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Fill" 
+                   HorizontalTextAlignment="Center"/>
+            
+            <Label Grid.Row="1" 
+                   x:Name="lbl_heading" 
+                   FontSize="18" 
+                   BackgroundColor="Navy" 
+                   TextColor="White" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Fill" 
+                   HorizontalTextAlignment="Center"/>
 
-            <SearchBar  x:Name="searchbar_expendituredetails" CancelButtonColor="Red" HorizontalOptions="FillAndExpand" Placeholder="Search" TextChanged="searchbar_expendituredetails_TextChanged"/>
+            <SearchBar Grid.Row="2" 
+                       x:Name="searchbar_expendituredetails" 
+                       CancelButtonColor="Red" 
+                       HorizontalOptions="Fill" 
+                       Placeholder="Search" 
+                       TextChanged="searchbar_expendituredetails_TextChanged"/>
 
-            <CollectionView x:Name="listView_expendituredetails" SelectionMode="None" >
+            <CollectionView Grid.Row="3" 
+                            x:Name="listView_expendituredetails" 
+                            SelectionMode="None" >
                 <CollectionView.ItemTemplate >
                     <DataTemplate>
-                        <Border Stroke="Navy" StrokeThickness="1" BackgroundColor="White" Margin="0,10,0,10">
+                        <Border Stroke="Navy" StrokeThickness="1" BackgroundColor="White" Margin="10,10,10,10">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="20"/>
                             </Border.StrokeShape>
-                            <Grid >
+                            <Grid Padding="15,12,15,12" RowSpacing="6">
                                 <Grid.RowDefinitions>
 
                                     <RowDefinition Height="Auto"/>
@@ -112,26 +134,15 @@
                                     <Label IsVisible="false" Text="{Binding lblObserverRemarks}" TextColor="Navy"  HorizontalTextAlignment="Start" FontSize="16"  FontAttributes="Bold" Grid.Row="13" Grid.Column="0"/>
                                     <Label IsVisible="false" Text="{Binding ObserverRemarks}" TextColor="Maroon"  HorizontalOptions="Start" HorizontalTextAlignment="Start" FontSize="16" Grid.Row="13" Grid.Column="1"/>
 
-                                    <StackLayout Grid.Row="14" HorizontalOptions="CenterAndExpand" Grid.ColumnSpan="2">
-                                        <Button   IsVisible="{Binding btnEditVisibility}" CommandParameter="{Binding ExpenseID}" Text="{Binding lbledit}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18" BackgroundColor="Navy" TextColor="White" CornerRadius="15"  Clicked="btn_edit_Clicked" x:Name="btn_edit"/>
+                                    <Button Grid.Row="14" Grid.ColumnSpan="2" IsVisible="{Binding btnEditVisibility}" CommandParameter="{Binding ExpenseID}" Text="{Binding lbledit}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18" BackgroundColor="Navy" TextColor="White" CornerRadius="15"  Clicked="btn_edit_Clicked" x:Name="btn_edit"/>
 
-                                    </StackLayout>
-
-                                    <StackLayout Grid.Row="15" HorizontalOptions="CenterAndExpand" Grid.ColumnSpan="2">
-                                        <Button   IsVisible="{Binding btnrplyobserverremarksvisibility}" CommandParameter="{Binding ExpenseID}" Text="{Binding lblReplyToObserverRemarks}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18" BackgroundColor="Navy" TextColor="White" CornerRadius="15"  Clicked="btn_ReplyToObserverRemarks_Clicked" x:Name="btn_ReplyToObserverRemarks"/>
-
-                                    </StackLayout>
+                                    <Button Grid.Row="15" Grid.ColumnSpan="2" IsVisible="{Binding btnrplyobserverremarksvisibility}" CommandParameter="{Binding ExpenseID}" Text="{Binding lblReplyToObserverRemarks}" FontAttributes="Bold" HorizontalOptions="Center" FontSize="18" BackgroundColor="Navy" TextColor="White" CornerRadius="15"  Clicked="btn_ReplyToObserverRemarks_Clicked" x:Name="btn_ReplyToObserverRemarks"/>
                                 </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
-
-
-
-
-        </StackLayout>
+        </Grid>
 
         <ContentView x:Name="popupRemarks" BackgroundColor="#C0808080" Padding="20" IsVisible="false" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
             <StackLayout HorizontalOptions="Center" VerticalOptions="Center" BackgroundColor="white">
