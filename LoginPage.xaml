@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CERS.LoginPage"
@@ -24,7 +24,14 @@
 
                     <!--<Frame  Margin="15,0,15,0" CornerRadius="10" BackgroundColor="White" BorderColor="WhiteSmoke" >-->
                     <StackLayout Margin="0" Padding="0">
-                        <Label TextColor="Navy" TextDecorations="Underline" Text="CERS &#10; Candidate Expenditure Reporting System" HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center"  FontSize="18" FontAttributes="Bold"/>
+                        <Label TextColor="Navy" 
+                               TextDecorations="Underline" 
+                               Text="CERS &#10; Candidate Expenditure Reporting System" 
+                               HorizontalOptions="CenterAndExpand" 
+                               HorizontalTextAlignment="Center"  
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               Margin="0,10,0,15"/>
                         <Image Source="ic_launcher.png" x:Name="img_launcher" HorizontalOptions="Center" HeightRequest="120"/>
                     </StackLayout>
                     <!--</Frame>-->
@@ -32,15 +39,41 @@
 
                     <Frame   CornerRadius="10"  BorderColor="Silver" VerticalOptions="CenterAndExpand" >
                         <StackLayout  Orientation="Vertical">
-                            <Label x:Name="lbl_signin" Text="Sign In" TextColor="Navy" HorizontalOptions="Center" FontSize="18" TextDecorations="Underline" FontAttributes="Bold"/>
+                            <Label x:Name="lbl_signin" 
+                                   Text="Sign In" 
+                                   TextColor="Navy" 
+                                   HorizontalOptions="Center" 
+                                   HorizontalTextAlignment="Center" 
+                                   FontSize="18" 
+                                   TextDecorations="Underline" 
+                                   FontAttributes="Bold" 
+                                   Margin="0,5,0,15"/>
                             <StackLayout Orientation="Horizontal">
                                 <Frame  HeightRequest="45" WidthRequest="45" CornerRadius="10" Padding="0" Margin="5">
                                     <Image Source="ic_mobile.png" Aspect="AspectFill" Margin="0"/>
                                 </Frame>
-                                <Entry PlaceholderColor="Black" x:Name="entry_mobileno" Placeholder="Enter Mobile No."  FontAttributes="None" HorizontalOptions="FillAndExpand"
-                                             Margin="0,0,20,0"  TextColor="Black" Keyboard="Numeric"  MaxLength="10"/>
+                                <Entry PlaceholderColor="Gray" 
+                                       x:Name="entry_mobileno" 
+                                       Placeholder="Enter Mobile No." 
+                                       FontAttributes="None" 
+                                       HorizontalOptions="FillAndExpand"
+                                       HorizontalTextAlignment="Start" 
+                                       Margin="0,0,20,0" 
+                                       TextColor="Black" 
+                                       Keyboard="Numeric" 
+                                       MaxLength="10"/>
                             </StackLayout>
-                            <Button  x:Name="btn_getotp" Text="GET OTP" FontSize="20" FontAttributes="Bold" BackgroundColor="Navy" TextColor="White" CornerRadius="30"  HorizontalOptions="Center" Clicked="btn_getotp_Clicked" Padding="10"/>
+                            <Button x:Name="btn_getotp" 
+                                    Text="GET OTP" 
+                                    FontSize="18" 
+                                    FontAttributes="Bold" 
+                                    BackgroundColor="Navy" 
+                                    TextColor="White" 
+                                    CornerRadius="25" 
+                                    HorizontalOptions="Center" 
+                                    Clicked="btn_getotp_Clicked" 
+                                    Padding="15,10" 
+                                    Margin="0,10,0,5"/>
 
 
                             <StackLayout x:Name="stack_submitotp" IsVisible="false" Orientation="Vertical">
@@ -48,10 +81,30 @@
                                     <Frame  HeightRequest="45" WidthRequest="45" CornerRadius="10" Padding="0" Margin="5">
                                         <Image Source="ic_otp.png" Aspect="AspectFill" Margin="0"/>
                                     </Frame>
-                                    <Entry PlaceholderColor="Black" x:Name="entry_otp" Placeholder="Enter OTP"  FontAttributes="None" HorizontalOptions="FillAndExpand" IsTextPredictionEnabled="False" IsPassword="True"
-                                             Margin="0,0,20,0" TextColor="Black" Keyboard="Numeric"  MaxLength="6"/>
+                                    <Entry PlaceholderColor="Gray" 
+                                           x:Name="entry_otp" 
+                                           Placeholder="Enter OTP" 
+                                           FontAttributes="None" 
+                                           HorizontalOptions="FillAndExpand" 
+                                           HorizontalTextAlignment="Center" 
+                                           IsTextPredictionEnabled="False" 
+                                           IsPassword="True"
+                                           Margin="0,0,20,0" 
+                                           TextColor="Black" 
+                                           Keyboard="Numeric" 
+                                           MaxLength="6"/>
                                 </StackLayout>
-                                <Button  x:Name="btn_submitotp" Text="Submit OTP" FontSize="20" FontAttributes="Bold" BackgroundColor="Navy" TextColor="White" CornerRadius="30"  HorizontalOptions="Center" Clicked="btn_submitotp_Clicked" Padding="10"/>
+                                <Button x:Name="btn_submitotp" 
+                                        Text="Submit OTP" 
+                                        FontSize="18" 
+                                        FontAttributes="Bold" 
+                                        BackgroundColor="Navy" 
+                                        TextColor="White" 
+                                        CornerRadius="25" 
+                                        HorizontalOptions="Center" 
+                                        Clicked="btn_submitotp_Clicked" 
+                                        Padding="15,10" 
+                                        Margin="0,10,0,5"/>
                             </StackLayout>                     
 
                         </StackLayout>
@@ -59,15 +112,29 @@
                     </Frame>
 
                     <StackLayout>
-                        <Label  TextColor="Black"  Margin="0" Padding="0" LineBreakMode="WordWrap" x:Name="lbl_appdescription" HorizontalOptions="CenterAndExpand" FontSize="15"
-                               Text="&lt;p style=&quot;text-align:justify;&quot;&gt; 
+                        <Label TextColor="Black" 
+                               Margin="15,20,15,10" 
+                               Padding="10" 
+                               LineBreakMode="WordWrap" 
+                               x:Name="lbl_appdescription" 
+                               HorizontalOptions="FillAndExpand" 
+                               HorizontalTextAlignment="Start" 
+                               FontSize="14"
+                               Text="&lt;div style=&quot;text-align:justify; line-height:1.4;&quot;&gt; 
                                 CERS (Candidate Expenditure Reporting System) mobile app is developed for the State Election Commission, Himachal Pradesh. 
                                 The App has been developed to file different types of Election Expenditure Expenses. 
                                 Contesting candidates or candidate's agent will be able to login into this app using their registered mobile number.
-                            
-                                &lt;p&gt;" TextType="Html"/>
+                                &lt;/div&gt;" 
+                               TextType="Html"/>
 
-                        <Label  TextColor="Black"  Margin="0" x:Name="lbl_appdescription1" HorizontalOptions="FillAndExpand" FontSize="15"/>
+                        <Label TextColor="Black" 
+                               Margin="15,5,15,10" 
+                               Padding="10" 
+                               x:Name="lbl_appdescription1" 
+                               HorizontalOptions="FillAndExpand" 
+                               HorizontalTextAlignment="Start" 
+                               LineBreakMode="WordWrap" 
+                               FontSize="14"/>
                     </StackLayout>
 
 
@@ -75,7 +142,15 @@
             </ScrollView>
 
             <StackLayout Orientation="Vertical" Margin="10,5,10,5" HorizontalOptions="FillAndExpand"   >
-                <Label Text="Centre Of Competence For Mobile Application Development NIC Himachal Pradesh" FontSize="14" Padding="5" BackgroundColor="White" TextColor="Navy" HorizontalTextAlignment="Center" FontAttributes="Bold"></Label>
+                <Label Text="Centre Of Competence For Mobile Application Development NIC Himachal Pradesh" 
+                       FontSize="12" 
+                       Padding="8" 
+                       BackgroundColor="White" 
+                       TextColor="Navy" 
+                       HorizontalTextAlignment="Center" 
+                       HorizontalOptions="FillAndExpand" 
+                       LineBreakMode="WordWrap" 
+                       FontAttributes="Bold"/>
             </StackLayout>
         </StackLayout>
 
@@ -84,7 +159,14 @@
                 <Frame BackgroundColor="White" HorizontalOptions="FillAndExpand">
                     <StackLayout Orientation="Horizontal" Margin="6" HorizontalOptions="FillAndExpand">
                         <ActivityIndicator IsVisible="true" IsRunning="true" Margin="5"/>
-                        <Label x:Name="lbl_PleaseWait" Text="Please Wait ..." TextColor="Black" FontAttributes="Bold" HorizontalOptions="FillAndExpand" WidthRequest="600" VerticalTextAlignment="Center"/>
+                        <Label x:Name="lbl_PleaseWait" 
+                               Text="Please Wait ..." 
+                               TextColor="Black" 
+                               FontAttributes="Bold" 
+                               HorizontalOptions="FillAndExpand" 
+                               HorizontalTextAlignment="Center" 
+                               VerticalTextAlignment="Center" 
+                               WidthRequest="600"/>
                     </StackLayout>
                 </Frame>
             </StackLayout>
@@ -96,10 +178,24 @@
                     <StackLayout>
                         <ScrollView>
                             <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" BackgroundColor="White" Spacing="8" Padding="6">
-                                <Label x:Name="lbl_popupheading"  Text="Confirm Your Details!" TextColor="#0596f7" HorizontalOptions="CenterAndExpand" FontAttributes="Bold" FontSize="16"/>
+                                <Label x:Name="lbl_popupheading" 
+                                       Text="Confirm Your Details!" 
+                                       TextColor="#0596f7" 
+                                       HorizontalOptions="CenterAndExpand" 
+                                       HorizontalTextAlignment="Center" 
+                                       FontAttributes="Bold" 
+                                       FontSize="16" 
+                                       Margin="0,5,0,10"/>
                                 <BoxView HeightRequest="2" BackgroundColor="#0596f7" WidthRequest="1000" HorizontalOptions="FillAndExpand"/>
                                 <Image  Source="Verify_ico.png" Margin="10" HeightRequest="40"/>
-                                <Label IsVisible="false" x:Name="lbl_usertypeheading" FontAttributes="Bold" TextColor="#0596f7" HorizontalOptions="FillAndExpand" HorizontalTextAlignment="Center" FontSize="16"/>
+                                <Label IsVisible="false" 
+                                       x:Name="lbl_usertypeheading" 
+                                       FontAttributes="Bold" 
+                                       TextColor="#0596f7" 
+                                       HorizontalOptions="FillAndExpand" 
+                                       HorizontalTextAlignment="Center" 
+                                       FontSize="16" 
+                                       Margin="0,5"/>
 
                                 <BoxView HeightRequest="2" BackgroundColor="#0596f7" WidthRequest="1000" HorizontalOptions="FillAndExpand"/>
                                 <Label Text="EPIC NO" HorizontalOptions="FillAndExpand"  TextColor="Black" FontSize="16"/>
