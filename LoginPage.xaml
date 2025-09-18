@@ -5,15 +5,15 @@
               xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls" 
              ios:Page.UseSafeArea="true" BackgroundColor="White" >
     <NavigationPage.TitleView>
-        <Grid ColumnDefinitions="Auto,*" VerticalOptions="CenterAndExpand">
+        <Grid ColumnDefinitions="Auto,*" VerticalOptions="Center">
             <Image Grid.Column="0" 
                    Source="seclogo.png" 
                    HeightRequest="40" 
-                   VerticalOptions="CenterAndExpand"/>
+                   VerticalOptions="Center"/>
             <Grid Grid.Column="1" 
                   RowDefinitions="Auto" 
-                  VerticalOptions="CenterAndExpand" 
-                  HorizontalOptions="CenterAndExpand">
+                  VerticalOptions="Center" 
+                  HorizontalOptions="Center">
                 <Label Grid.Row="0"
                        Text="State Election Commission, H.P." 
                        Style="{StaticResource NavigationLabelColor}" 
@@ -27,7 +27,7 @@
 
     <Grid>
         <Grid Margin="9" RowDefinitions="*,Auto">
-            <ScrollView Grid.Row="0" VerticalOptions="FillAndExpand">
+            <ScrollView Grid.Row="0" VerticalOptions="Fill">
                 <Grid RowDefinitions="Auto,Auto,Auto,*">
                     
                     <!-- Header Section -->
@@ -36,7 +36,7 @@
                                TextColor="Navy" 
                                TextDecorations="Underline" 
                                Text="CERS &#10; Candidate Expenditure Reporting System" 
-                               HorizontalOptions="CenterAndExpand" 
+                               HorizontalOptions="Center" 
                                HorizontalTextAlignment="Center"  
                                FontSize="18" 
                                FontAttributes="Bold" 
@@ -52,7 +52,7 @@
                     <Frame Grid.Row="1" 
                            CornerRadius="10" 
                            BorderColor="Silver" 
-                           VerticalOptions="CenterAndExpand">
+                           VerticalOptions="Center">
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto">
                             <Label Grid.Row="0"
                                    x:Name="lbl_signin" 
@@ -82,7 +82,7 @@
                                        x:Name="entry_mobileno" 
                                        Placeholder="Enter Mobile No." 
                                        FontAttributes="None" 
-                                       HorizontalOptions="FillAndExpand"
+                                       HorizontalOptions="Fill"
                                        HorizontalTextAlignment="Start" 
                                        Margin="0,0,20,0" 
                                        TextColor="Black" 
@@ -124,7 +124,7 @@
                                            x:Name="entry_otp" 
                                            Placeholder="Enter OTP" 
                                            FontAttributes="None" 
-                                           HorizontalOptions="FillAndExpand" 
+                                           HorizontalOptions="Fill" 
                                            HorizontalTextAlignment="Center" 
                                            IsTextPredictionEnabled="False" 
                                            IsPassword="True"
@@ -157,7 +157,7 @@
                                Padding="10" 
                                LineBreakMode="WordWrap" 
                                x:Name="lbl_appdescription" 
-                               HorizontalOptions="FillAndExpand" 
+                               HorizontalOptions="Fill" 
                                HorizontalTextAlignment="Start" 
                                FontSize="14"
                                Text="&lt;div style=&quot;text-align:justify; line-height:1.4;&quot;&gt; 
@@ -172,7 +172,7 @@
                                Margin="15,5,15,10" 
                                Padding="10" 
                                x:Name="lbl_appdescription1" 
-                               HorizontalOptions="FillAndExpand" 
+                               HorizontalOptions="Fill" 
                                HorizontalTextAlignment="Start" 
                                LineBreakMode="WordWrap" 
                                FontSize="14"/>
@@ -183,14 +183,14 @@
             <!-- Footer -->
             <Grid Grid.Row="1" 
                   Margin="10,5,10,5" 
-                  HorizontalOptions="FillAndExpand">
+                  HorizontalOptions="Fill">
                 <Label Text="Centre Of Competence For Mobile Application Development NIC Himachal Pradesh" 
                        FontSize="12" 
                        Padding="8" 
                        BackgroundColor="White" 
                        TextColor="Navy" 
                        HorizontalTextAlignment="Center" 
-                       HorizontalOptions="FillAndExpand" 
+                       HorizontalOptions="Fill" 
                        LineBreakMode="WordWrap" 
                        FontAttributes="Bold"/>
             </Grid>
@@ -198,8 +198,8 @@
 
         <ContentView x:Name="Loading_activity" BackgroundColor="#C0808080" Padding="20, 20" IsVisible="false" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
             <Grid VerticalOptions="Center" HorizontalOptions="Center">
-                <Frame BackgroundColor="White" HorizontalOptions="FillAndExpand">
-                    <Grid ColumnDefinitions="Auto,*" Margin="6" HorizontalOptions="FillAndExpand">
+                <Frame BackgroundColor="White" HorizontalOptions="Fill">
+                    <Grid ColumnDefinitions="Auto,*" Margin="6" HorizontalOptions="Fill">
                         <ActivityIndicator Grid.Column="0" 
                                          IsVisible="true" 
                                          IsRunning="true" 
@@ -209,7 +209,7 @@
                                Text="Please Wait ..." 
                                TextColor="Black" 
                                FontAttributes="Bold" 
-                               HorizontalOptions="FillAndExpand" 
+                               HorizontalOptions="Fill" 
                                HorizontalTextAlignment="Center" 
                                VerticalTextAlignment="Center" 
                                WidthRequest="600"/>
@@ -220,11 +220,11 @@
 
         <ContentView x:Name="popupDetails_Verified" BackgroundColor="#C0808080" Padding="40, 40" IsVisible="false" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
             <Grid HorizontalOptions="Center" VerticalOptions="Center">
-                <Frame BorderColor="#0596f7" CornerRadius="15" Padding="10" VerticalOptions="FillAndExpand">
+                <Frame BorderColor="#0596f7" CornerRadius="15" Padding="10" VerticalOptions="Fill">
                     <Grid RowDefinitions="*,Auto">
                         <ScrollView Grid.Row="0">
                             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto" 
-                                  VerticalOptions="FillAndExpand" 
+                                  VerticalOptions="Fill" 
                                   BackgroundColor="White" 
                                   RowSpacing="8" 
                                   Padding="6">
@@ -232,7 +232,7 @@
                                        x:Name="lbl_popupheading" 
                                        Text="Confirm Your Details!" 
                                        TextColor="#0596f7" 
-                                       HorizontalOptions="CenterAndExpand" 
+                                       HorizontalOptions="Center" 
                                        HorizontalTextAlignment="Center" 
                                        FontAttributes="Bold" 
                                        FontSize="16" 
@@ -241,7 +241,7 @@
                                          HeightRequest="2" 
                                          BackgroundColor="#0596f7" 
                                          WidthRequest="1000" 
-                                         HorizontalOptions="FillAndExpand"/>
+                                         HorizontalOptions="Fill"/>
                                 <Image Grid.Row="2" 
                                        Source="Verify_ico.png" 
                                        Margin="10" 
@@ -251,7 +251,7 @@
                                        x:Name="lbl_usertypeheading" 
                                        FontAttributes="Bold" 
                                        TextColor="#0596f7" 
-                                       HorizontalOptions="FillAndExpand" 
+                                       HorizontalOptions="Fill" 
                                        HorizontalTextAlignment="Center" 
                                        FontSize="16" 
                                        Margin="0,5"/>
@@ -260,10 +260,10 @@
                                          HeightRequest="2" 
                                          BackgroundColor="#0596f7" 
                                          WidthRequest="1000" 
-                                         HorizontalOptions="FillAndExpand"/>
+                                         HorizontalOptions="Fill"/>
                                 <Label Grid.Row="5" 
                                        Text="EPIC NO" 
-                                       HorizontalOptions="FillAndExpand" 
+                                       HorizontalOptions="Fill" 
                                        TextColor="Black" 
                                        FontSize="16"/>
                                 <Label Grid.Row="6" 
@@ -275,7 +275,7 @@
                                        FontSize="16"/>
                                 <Label Grid.Row="7" 
                                        Text="VOTER NAME" 
-                                       HorizontalOptions="FillAndExpand" 
+                                       HorizontalOptions="Fill" 
                                        TextColor="Black" 
                                        FontSize="16"/>
                                 <Label Grid.Row="8" 
@@ -287,7 +287,7 @@
                                        FontSize="16"/>
                                 <Label Grid.Row="9" 
                                        Text="RELATIVE NAME" 
-                                       HorizontalOptions="FillAndExpand" 
+                                       HorizontalOptions="Fill" 
                                        TextColor="Black" 
                                        FontSize="16"/>
                                 <Label Grid.Row="10" 
@@ -299,7 +299,7 @@
                                        FontSize="16"/>
                                 <Label Grid.Row="11" 
                                        Text="Panchayat Name" 
-                                       HorizontalOptions="FillAndExpand" 
+                                       HorizontalOptions="Fill" 
                                        TextColor="Black" 
                                        FontSize="16"/>
                                 <Label Grid.Row="12" 
@@ -311,7 +311,7 @@
                                        FontSize="16"/>
                                 <Label Grid.Row="13" 
                                        Text="Contesting For" 
-                                       HorizontalOptions="FillAndExpand" 
+                                       HorizontalOptions="Fill" 
                                        TextColor="Black" 
                                        FontSize="16"/>
                                 <Label Grid.Row="14" 
@@ -325,10 +325,10 @@
                                          HeightRequest="2" 
                                          BackgroundColor="#0596f7" 
                                          WidthRequest="1000" 
-                                         HorizontalOptions="FillAndExpand"/>
+                                         HorizontalOptions="Fill"/>
                             </Grid>
                         </ScrollView>
-                        <Grid Grid.Row="1" ColumnDefinitions="*,*" HorizontalOptions="FillAndExpand">
+                        <Grid Grid.Row="1" ColumnDefinitions="*,*" HorizontalOptions="Fill">
                             <Button Grid.Column="0" 
                                     BackgroundColor="#0596f7" 
                                     TextColor="White" 
@@ -336,7 +336,7 @@
                                     x:Name="Btn_NotMe" 
                                     Clicked="Btn_NotMe_Clicked" 
                                     Text="Not Me !" 
-                                    HorizontalOptions="FillAndExpand"/>
+                                    HorizontalOptions="Fill"/>
                             <Button Grid.Column="1" 
                                     BackgroundColor="#0596f7" 
                                     TextColor="White" 
@@ -344,7 +344,7 @@
                                     x:Name="Btn_Continue" 
                                     Clicked="Btn_Continue_Clicked" 
                                     Text="Confirm" 
-                                    HorizontalOptions="FillAndExpand"/>
+                                    HorizontalOptions="Fill"/>
                         </Grid>
                     </Grid>
                 </Frame>
