@@ -52,7 +52,9 @@
                     <Frame Grid.Row="1" 
                            CornerRadius="10" 
                            BorderColor="Silver" 
-                           VerticalOptions="Center">
+                           VerticalOptions="Center"
+                           Margin="0,30,0,20">
+                        
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto">
                             <Label Grid.Row="0"
                                    x:Name="lbl_signin" 
